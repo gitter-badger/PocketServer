@@ -1,8 +1,8 @@
 package com.pocketserver.player;
 
 public class Player extends OfflinePlayer {
+	
     private GameMode gameMode = GameMode.SURVIVAL;
-
 
     public void sendMessage() {
 
@@ -15,4 +15,5 @@ public class Player extends OfflinePlayer {
     public void setGameMode(GameMode gameMode) {
         this.gameMode = gameMode;
     }
+    
 }

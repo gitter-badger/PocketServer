@@ -1,19 +1,19 @@
 package com.pocketserver.net.packets.ping;
 
-import com.pocketserver.net.Packet;
+import com.pocketserver.net.InPacket;
+import com.pocketserver.net.PacketID;
 
-public class PingPacket extends Packet {
-    protected PingPacket() {
-        super(0x00);
-    }
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.socket.DatagramPacket;
+
+@PacketID(0x00)
+public class PingPacket extends InPacket {
+	
+    protected PingPacket() {}
 
     @Override
-    public void decode() {
-
+    public void decode(ChannelHandlerContext ctxt, DatagramPacket buf) {
+    	new PongPacket(buf.content().readLong()).send(ctxt);
     }
-
-    @Override
-    public void encode() {
-
-    }
+    
 }
