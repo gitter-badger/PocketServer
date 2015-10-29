@@ -2,7 +2,6 @@ package com.pocketserver.event;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,13 +19,13 @@ public class EventBus {
             if (!method.isAnnotationPresent(Listener.class)) {
                 continue;
             }
-            Parameter[] parameters = method.getParameters();
+            Class<?>[] parameters = method.getParameterTypes();
             if (parameters.length == 0) {
                 continue;
             }
 
-            Class<?> type = parameters[0].getType();
-            List<EventData> dataList = eventListeners.getOrDefault(type, new ArrayList<EventData>());
+            Class<?> type = parameters[0];
+            List<EventData> dataList = eventListeners.containsKey(type) ? new ArrayList<EventData>() : eventListeners.get(type);
             EventData data = new EventData(listener, method);
             dataList.add(data);
             eventListeners.put(type, dataList);
