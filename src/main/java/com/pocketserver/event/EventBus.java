@@ -25,7 +25,7 @@ public class EventBus {
             }
 
             Class<?> type = parameters[0];
-            List<EventData> dataList = eventListeners.containsKey(type) ? new ArrayList<EventData>() : eventListeners.get(type);
+            List<EventData> dataList = eventListeners.containsKey(type) ? eventListeners.get(type) : new ArrayList<EventData>();
             EventData data = new EventData(listener, method);
             dataList.add(data);
             eventListeners.put(type, dataList);
