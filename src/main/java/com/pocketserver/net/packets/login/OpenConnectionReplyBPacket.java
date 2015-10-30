@@ -21,7 +21,6 @@ public class OpenConnectionReplyBPacket extends OutPacket {
 		writeMagic(dg.content());
 		dg.content().writeLong(TEMP_SERVERID);
 		dg.content().writeShort(clientPort);
-		System.out.println("Client port: " + clientPort);
 		dg.content().writeShort(mtu);
 		dg.content().writeByte(0);
 		return dg;
