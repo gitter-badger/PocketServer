@@ -16,6 +16,7 @@ public class PongPacket extends OutPacket {
 
     @Override
     public DatagramPacket encode(DatagramPacket buf) {
+    	buf.content().writeInt(getPacketID());
     	buf.content().writeLong(identifier);
         return buf;
     }

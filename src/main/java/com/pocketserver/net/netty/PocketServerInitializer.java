@@ -8,7 +8,6 @@ public class PocketServerInitializer extends ChannelInitializer<NioDatagramChann
     @Override
     protected void initChannel(NioDatagramChannel channel) throws Exception {
         ChannelPipeline pipeline = channel.pipeline();
-        //pipeline.addLast(new PacketEncoder());
         pipeline.addLast(new PocketServerHandler());
     }
 }

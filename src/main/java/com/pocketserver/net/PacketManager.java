@@ -3,10 +3,10 @@ package com.pocketserver.net;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pocketserver.net.packets.login.OpenConnectionRequestAPacket;
+import com.pocketserver.net.packets.login.OpenConnectionRequestBPacket;
 import com.pocketserver.net.packets.login.UnconnectedPingPacket;
-import com.pocketserver.net.packets.login.UnconnectedPongPacket;
 import com.pocketserver.net.packets.ping.PingPacket;
-import com.pocketserver.net.packets.ping.PongPacket;
 
 public class PacketManager {
 	
@@ -20,16 +20,17 @@ public class PacketManager {
 
     {
     	register(PingPacket.class);
-    	register(PongPacket.class);
-
     	register(UnconnectedPingPacket.class);
-    	register(UnconnectedPongPacket.class);
+
+    	register(OpenConnectionRequestAPacket.class);
+    	register(OpenConnectionRequestBPacket.class);
     }
     
     void register(Class<? extends Packet> clazz) {
     	PacketID id = clazz.getAnnotation(PacketID.class);
     	if (id != null)
-    		packetIds.put(id.value(), clazz);
+    		for (int i : id.value())
+    			packetIds.put(i, clazz);
     }
     
     public Class<? extends Packet> getPacketClass(int id) {

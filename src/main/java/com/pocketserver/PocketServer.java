@@ -1,7 +1,7 @@
 package com.pocketserver;
 
-import com.pocketserver.net.netty.PocketServerHandler;
 import com.pocketserver.net.netty.PocketServerInitializer;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
