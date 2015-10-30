@@ -1,17 +1,25 @@
 package com.pocketserver.net;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.socket.DatagramPacket;
+
 public abstract class Packet {
-    private final int packetId;
-
-    protected Packet(int packetId) {
-        this.packetId = packetId;
+	
+    public final int getPacketID() {
+    	PacketID id = getClass().getAnnotation(PacketID.class);
+    	return id == null ? -1 : id.value();
     }
-
-    public int getPacketId() {
-        return packetId;
+    
+    public final void send(ChannelHandlerContext ctxt) {
+    	ByteBuf buf = Unpooled.buffer();
+    	buf.writeByte(getPacketID());
+    	encode(buf);
+    	ctxt.write(buf);
     }
-
-    public abstract void decode();
-    public abstract void encode();
+    
+    public abstract void decode(ChannelHandlerContext ctxt, DatagramPacket dg);
+    public abstract void encode(ByteBuf buf);
 
 }

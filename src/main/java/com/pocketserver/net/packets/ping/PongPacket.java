@@ -1,19 +1,22 @@
 package com.pocketserver.net.packets.ping;
 
-import com.pocketserver.net.Packet;
+import com.pocketserver.net.OutPacket;
+import com.pocketserver.net.PacketID;
 
-public class PongPacket extends Packet {
-    protected PongPacket() {
-        super(0x03);
+import io.netty.buffer.ByteBuf;
+
+@PacketID(0x03)
+public class PongPacket extends OutPacket {
+	
+	private long identifier;
+	
+    protected PongPacket(long identifier) {
+    	this.identifier = identifier;
     }
 
     @Override
-    public void decode() {
-
+    public void encode(ByteBuf buf) {
+    	buf.writeLong(identifier);
     }
-
-    @Override
-    public void encode() {
-
-    }
+    
 }

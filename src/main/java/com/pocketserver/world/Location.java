@@ -4,21 +4,29 @@ import com.pocketserver.blocks.Block;
 
 import java.io.Serializable;
 
-public class Location implements Cloneable,Serializable{
-    private final World world;
-    private final double x;
-    private final double y;
-    private final double z;
+public class Location implements Cloneable, Serializable{
+	
+	private static final long serialVersionUID = -7074605674263137642L;
+	
+	private final World world;
+    private final double x, y, z;
+    private final float yaw, pitch;
 
-    public Location(World world, double x, double y, double z) {
+    public Location(World world, double x, double y, double z, float yaw, float pitch) {
         this.world = world;
         this.x = x;
         this.y = y;
         this.z = z;
+        this.yaw = yaw;
+        this.pitch = pitch;
+    }
+    
+    public Location(World world, double x, double y, double z) {
+    	this(world, x, y, z, 0, 0);
     }
 
     public Location(Location location) {
-        this(location.getWorld(),location.getX(),location.getY(),location.getZ());
+        this(location.getWorld(), location.getX(), location.getY(), location.getZ());
     }
 
     public Block getBlock() {
@@ -40,6 +48,14 @@ public class Location implements Cloneable,Serializable{
     public double getZ() {
         return z;
     }
+    
+    public float getYaw() {
+    	return yaw;
+    }
+    
+    public float getPitch() {
+    	return pitch;
+    }
 
     public int getBlockX() {
         return (int) x;
@@ -52,9 +68,17 @@ public class Location implements Cloneable,Serializable{
     public int getBlockZ() {
         return (int) z;
     }
+    
+    public Location add(double x, double y, double z) {
+    	return new Location(world, this.x + x, this.y + y, this.z + z, yaw, pitch);
+    }
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
+    protected Location clone() {
+        return new Location(world, x, y, z, yaw, pitch);
+    }
+    
+    public Vector toVector() {
+    	return new Vector(x, y, z);
     }
 }

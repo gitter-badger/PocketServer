@@ -5,19 +5,28 @@ import com.google.common.collect.Table;
 import com.pocketserver.blocks.Block;
 
 public class World {
-    private final Table<Integer,Integer,Chunk> chunkLocations = HashBasedTable.create();
+	
+    private final Table<Integer, Integer, Chunk> chunks = HashBasedTable.create();
 
+    public Chunk getChunk(int x, int z) {
+    	return getChunk(x, z, false);
+    }
+    
+    public Chunk getChunk(int cx, int cz, boolean load) {
+    	if (!load || chunks.contains(cx, cz))
+    		return chunks.get(cx, cz);
+    	Chunk c = new Chunk(this, cx, cz);
+    	chunks.put(cx, cz, c);
+    	return c;
+    }
+    
     public Block getBlockAt(int x,int y, int z) {
-        x = x >> 4;
-        z = z >> 4;
-        if (!chunkLocations.contains(x, z)) {
-            return null;
-        }
-        Chunk chunk = chunkLocations.get(x, z);
-        return chunk.getBlock(x,y,z);
+        int cx = x >> 4, cz = z >> 4;
+        Chunk c = getChunk(cx, cz);
+        return c != null ? c.getBlock(x % 16, y, z % 16) : null;
     }
 
     public Block getBlockAt(Location location) {
-        return getBlockAt(location.getBlockX(),location.getBlockY(),location.getBlockZ());
+        return getBlockAt(location.getBlockX(), location.getBlockY(), location.getBlockZ());
     }
 }
