@@ -1,15 +1,16 @@
 package com.pocketserver.event;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class EventBus {
 	
-    private final Map<Class<?>, Set<EventData>> eventListeners;
+    private final Map<Class<?>, List<EventData>> eventListeners;
 
     public EventBus() {
         this.eventListeners = new ConcurrentHashMap<>();
@@ -27,7 +28,7 @@ public class EventBus {
                 continue;
             }
             Class<?> type = parameters[0];
-            Set<EventData> dataList = eventListeners.containsKey(type) ? eventListeners.get(type) : new HashSet<EventData>();
+            List<EventData> dataList = eventListeners.containsKey(type) ? eventListeners.get(type) : new ArrayList<EventData>();
             EventData data = new EventData(listener, method);
             dataList.add(data);
             eventListeners.put(type, dataList);
@@ -37,7 +38,7 @@ public class EventBus {
     public <T extends Event> T post(T event) {
     	if (event == null)
     		return null;
-        for (Entry<Class<?>, Set<EventData>> entry : eventListeners.entrySet()) {
+        for (Entry<Class<?>, List<EventData>> entry : eventListeners.entrySet()) {
             if (entry.getKey() != event.getClass()) {
                 continue;
             }
@@ -59,13 +60,13 @@ public class EventBus {
         }
         
         public void invoke(Event event) {
-        	if (method == null || method.getReturnType() != void.class || method.getParameterTypes().length != 1 || !Event.class.isAssignableFrom(method.getParameterTypes()[0]))
-        		return;
         	if (!method.isAccessible())
         		method.setAccessible(true);
-        	try {
-        		method.invoke(object, event);
-        	} catch (Exception ex) {}
+            try {
+                method.invoke(object, event);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
         }
         
     }

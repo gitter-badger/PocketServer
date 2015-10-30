@@ -12,14 +12,14 @@ public abstract class Packet {
     	return id == null ? -1 : id.value();
     }
     
-    public final void send(ChannelHandlerContext ctxt) {
+    public final void send(ChannelHandlerContext ctx) {
     	ByteBuf buf = Unpooled.buffer();
     	buf.writeByte(getPacketID());
-    	encode(buf);
-    	ctxt.write(buf);
+
+    	ctx.write(buf);
     }
     
-    public abstract void decode(ChannelHandlerContext ctxt, DatagramPacket dg);
-    public abstract void encode(ByteBuf buf);
+    public abstract void decode(ChannelHandlerContext ctx, DatagramPacket dg);
+    public abstract DatagramPacket encode(DatagramPacket buf);
 
 }

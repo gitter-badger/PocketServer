@@ -1,11 +1,11 @@
 package com.pocketserver.net;
 
-import io.netty.buffer.ByteBuf;
+import io.netty.channel.socket.DatagramPacket;
 
 public abstract class InPacket extends Packet {
 
 	@Override
-	public final void encode(ByteBuf buf) {
+	public final DatagramPacket encode(DatagramPacket buf) {
 		throw new UnsupportedOperationException(getClass().getSimpleName() + " is an InPacket, so does not support encoding.");
 	}
 

@@ -3,7 +3,7 @@ package com.pocketserver.net.packets.ping;
 import com.pocketserver.net.OutPacket;
 import com.pocketserver.net.PacketID;
 
-import io.netty.buffer.ByteBuf;
+import io.netty.channel.socket.DatagramPacket;
 
 @PacketID(0x03)
 public class PongPacket extends OutPacket {
@@ -15,8 +15,8 @@ public class PongPacket extends OutPacket {
     }
 
     @Override
-    public void encode(ByteBuf buf) {
-    	buf.writeLong(identifier);
+    public DatagramPacket encode(DatagramPacket buf) {
+    	buf.content().writeLong(identifier);
+        return buf;
     }
-    
 }

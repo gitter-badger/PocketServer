@@ -74,7 +74,7 @@ public class Location implements Cloneable, Serializable{
     }
 
     @Override
-    protected Location clone() {
+    protected Location clone() throws CloneNotSupportedException {
         return new Location(world, x, y, z, yaw, pitch);
     }
     

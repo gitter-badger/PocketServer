@@ -11,9 +11,9 @@ public class PingPacket extends InPacket {
 	
     protected PingPacket() {}
 
+
     @Override
-    public void decode(ChannelHandlerContext ctxt, DatagramPacket buf) {
-    	new PongPacket(buf.content().readLong()).send(ctxt);
+    public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
+        new PongPacket(dg.content().readLong()).send(ctx);
     }
-    
 }

@@ -2,22 +2,29 @@ package com.pocketserver.net.packets.login;
 
 import com.pocketserver.net.Packet;
 
-import io.netty.buffer.ByteBuf;
+import com.pocketserver.net.PacketID;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
 
+@PacketID(0x1C)
 public class UnconnectedPongPacket extends Packet {
-	
-	protected UnconnectedPongPacket() {}
+
+    private final long id;
+
+    protected UnconnectedPongPacket(long id) {
+        this.id = id;
+    }
 
     @Override
-    public void decode(ChannelHandlerContext ctxt, DatagramPacket buf) {
+    public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
 
     }
 
     @Override
-    public void encode(ByteBuf buf) {
-
+    public DatagramPacket encode(DatagramPacket buf) {
+        buf.content().writeInt(this.getPacketID());
+        buf.content().writeLong(id);
+        System.out.println("Encoding this, " + buf.content().duplicate().readInt());
+        return buf;
     }
-    
 }

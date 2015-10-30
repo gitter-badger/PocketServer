@@ -41,11 +41,15 @@ public class PacketManager {
 		Packet pack = null;
 		try {
 			pack = clazz.getConstructor().newInstance();
-		} catch (Exception ex) {}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 		if (pack == null) {
 			try {
 				pack = clazz.newInstance();
-			} catch (Exception ex) {}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return pack;
 	}

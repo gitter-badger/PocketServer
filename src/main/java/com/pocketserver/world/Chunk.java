@@ -1,27 +1,29 @@
 package com.pocketserver.world;
 
 import com.pocketserver.blocks.Block;
+import com.pocketserver.blocks.Material;
 
 public class Chunk {
-	
-	private World world;
-	
+
+    private final World world;
     private final int x;
     private final int z;
-    
-    private Block[] blocks = new Block[256 * 16 * 16];
+
+    private final Block[] blocks = new Block[256 * 16 * 16];
 
     public Chunk(World world, int cx, int cz) {
-    	this.world = world;
+        this.world = world;
         this.x = cx;
         this.z = cz;
-        
-        for (int x = 0; x < 16; x++)
-        	for (int y = 0; y < 16; y++)
-        		for (int z = 0; z < 16; z++) {
-        			Block b = null; // TODO
-        			blocks[getBlockIndex(x, y, z)] = b;
-        		}
+
+        for (int x = 0; x < 16; x++) {
+            for (int y = 0; y < 256; y++) {
+                for (int z = 0; z < 16; z++) {
+                    Block b = new Block(Material.AIR, new Location(world, x, y, z));
+                    blocks[getBlockIndex(x, y, z)] = b;
+                }
+            }
+        }
     }
 
     public Chunk(Location loc) {
