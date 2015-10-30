@@ -23,6 +23,7 @@ public class OpenConnectionRequestBPacket extends InPacket {
         	long clientID = buf.readLong();
         	
         	OpenConnectionReplyBPacket reply = new OpenConnectionReplyBPacket(mtu, dg.sender().getPort());
+        	ctx.write(reply.encode(new DatagramPacket(Unpooled.buffer(), dg.sender())));
         	ctx.flush();
         }
 	}
