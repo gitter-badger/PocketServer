@@ -1,8 +1,16 @@
 package com.pocketserver.player;
 
-public class Player extends OfflinePlayer {
-	
+import com.pocketserver.entity.living.LivingEntity;
+
+import java.net.InetAddress;
+
+public class Player extends LivingEntity {
+	private final InetAddress address;
     private GameMode gameMode = GameMode.SURVIVAL;
+
+    public Player(InetAddress address) {
+        this.address = address;
+    }
 
     public void sendMessage() {
 

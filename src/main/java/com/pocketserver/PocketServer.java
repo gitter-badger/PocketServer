@@ -9,14 +9,11 @@ import io.netty.channel.socket.nio.NioDatagramChannel;
 
 public class PocketServer {
 
-    private boolean running;
-
     public static void main(String[] args) {
         new PocketServer();
     }
 
     private PocketServer() {
-        this.running = true;
         EventLoopGroup group = new NioEventLoopGroup();
         try {
             Bootstrap bootstrap = new Bootstrap();
@@ -31,7 +28,6 @@ public class PocketServer {
             e.printStackTrace();
         } finally {
             group.shutdownGracefully();
-            this.running = false;
         }
     }
 	
@@ -41,7 +37,4 @@ public class PocketServer {
 		return server;
 	}
 
-    public boolean isRunning() {
-        return running;
-    }
 }

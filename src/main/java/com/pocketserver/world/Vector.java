@@ -34,8 +34,8 @@ public class Vector implements Cloneable {
 		return add(vec.x, vec.y, vec.z);
 	}
 	
-	public Vector multiply(double mult) {
-		return new Vector(x * mult, y * mult, z * mult);
+	public Vector multiply(double multiple) {
+		return new Vector(x * multiple, y * multiple, z * multiple);
 	}
 	
 	public Vector dot(Vector vec) {

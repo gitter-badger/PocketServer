@@ -20,11 +20,11 @@ public class EventBus {
     	if (listener == null)
     		return;
         for (Method method : listener.getClass().getMethods()) {
-            if (!method.isAnnotationPresent(Listener.class) || method.getReturnType() != void.class) {
+            if (!method.isAnnotationPresent(Listener.class)) {
                 continue;
             }
             Class<?>[] parameters = method.getParameterTypes();
-            if (parameters.length != 1 || !Event.class.isAssignableFrom(parameters[0])) {
+            if (parameters.length == 0) {
                 continue;
             }
             Class<?> type = parameters[0];
@@ -39,7 +39,7 @@ public class EventBus {
     	if (event == null)
     		return null;
         for (Entry<Class<?>, List<EventData>> entry : eventListeners.entrySet()) {
-            if (entry.getKey() != event.getClass()) {
+            if (entry.getKey().isInstance(event)) {
                 continue;
             }
             for (EventData eventData : entry.getValue()) {
@@ -68,7 +68,5 @@ public class EventBus {
                 e.printStackTrace();
             }
         }
-        
     }
-    
 }
