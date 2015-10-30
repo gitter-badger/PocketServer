@@ -15,7 +15,7 @@ public class UnconnectedPingPacket extends InPacket {
     @Override
     public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
         ByteBuf content = dg.content();
-        UnconnectedPongPacket packet = new UnconnectedPongPacket(content.readLong());
+        UnconnectedPongPacket packet = new UnconnectedPongPacket(0x1C, content.readLong());
         if (content.readLong() == Packet.MAGIC_1 && content.readLong() == Packet.MAGIC_2)
         	ctx.write(packet.encode(new DatagramPacket(Unpooled.buffer(), dg.sender())));
 	    ctx.flush();
