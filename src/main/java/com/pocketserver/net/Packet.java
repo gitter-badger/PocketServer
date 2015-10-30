@@ -28,6 +28,13 @@ public abstract class Packet {
 		buf.writeBytes(str.getBytes(StandardCharsets.US_ASCII));
 	}
 	
+	public final String readString(ByteBuf buf) {
+		short len = buf.readShort();
+		byte[] bytes = new byte[len];
+		buf.readBytes(bytes);
+		return new String(bytes, StandardCharsets.US_ASCII);
+	}
+	
     public final int getPacketID() {
     	PacketID id = getClass().getAnnotation(PacketID.class);
     	return id == null ? -1 : id.value()[0];

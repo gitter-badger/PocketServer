@@ -18,7 +18,7 @@ public class OpenConnectionRequestAPacket extends InPacket {
         if (buf.readLong() == Packet.MAGIC_1 && buf.readLong() == Packet.MAGIC_2) {
         	byte proto = buf.readByte();
         	int mtu = 0;
-        	while (buf.readableBytes() > 0 && buf.readByte() == 0x00)
+        	while (buf.discardReadBytes().readableBytes() > 0 && buf.readByte() == 0x00)
         		mtu++;
         	if (proto == Protocol.RAKNET) {
         		ctx.write(new OpenConnectionReplyAPacket(mtu).encode(new DatagramPacket(Unpooled.buffer(), dg.sender())));

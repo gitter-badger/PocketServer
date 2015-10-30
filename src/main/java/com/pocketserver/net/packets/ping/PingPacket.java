@@ -9,13 +9,11 @@ import io.netty.channel.socket.DatagramPacket;
 
 @PacketID(0x00)
 public class PingPacket extends InPacket {
-	
-    protected PingPacket() {}
-
 
     @Override
     public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
         PongPacket pong = new PongPacket(dg.content().readLong());
-        ctx.writeAndFlush(pong.encode(new DatagramPacket(Unpooled.buffer(), dg.sender())));
+        ctx.write(pong.encode(new DatagramPacket(Unpooled.buffer(), dg.sender())));
+        ctx.flush();
     }
 }

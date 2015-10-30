@@ -16,6 +16,7 @@ public class OpenConnectionReplyAPacket extends OutPacket {
 	
 	@Override
 	public DatagramPacket encode(DatagramPacket dg) {
+		dg.content().writeByte(this.getPacketID());
 		writeMagic(dg.content());
 		dg.content().writeLong(TEMP_SERVERID);
 		dg.content().writeByte(0);

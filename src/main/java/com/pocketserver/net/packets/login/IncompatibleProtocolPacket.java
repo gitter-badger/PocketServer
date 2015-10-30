@@ -10,7 +10,7 @@ public class IncompatibleProtocolPacket extends OutPacket {
 
 	@Override
 	public DatagramPacket encode(DatagramPacket buf) {
-		buf.content().writeInt(this.getPacketID());
+		buf.content().writeByte(this.getPacketID());
 		buf.content().writeByte(Protocol.RAKNET);
 		this.writeMagic(buf.content());
 		buf.content().writeLong(TEMP_SERVERID);

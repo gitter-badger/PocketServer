@@ -11,8 +11,6 @@ import io.netty.channel.socket.DatagramPacket;
 
 @PacketID(0x01)
 public class UnconnectedPingPacket extends InPacket {
-	
-    public UnconnectedPingPacket() {}
 
     @Override
     public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
