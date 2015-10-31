@@ -1,7 +1,9 @@
 package com.pocketserver.player;
 
-import com.pocketserver.net.PacketManager;
 import com.pocketserver.net.packets.message.TitlePacket;
+
+import io.netty.buffer.Unpooled;
+import io.netty.channel.socket.DatagramPacket;
 
 public class Title {
     private final String topLine; //TODO RENAME THESE
@@ -26,8 +28,8 @@ public class Title {
         return fadeDelay;
     }
 
-    public void send() {
+    public void send(Player player) {
         TitlePacket packet = new TitlePacket();
-        packet.encode(packet.createDatagramPacket());
+        packet.encode(new DatagramPacket(Unpooled.buffer(), player.getAddress()));
     }
 }

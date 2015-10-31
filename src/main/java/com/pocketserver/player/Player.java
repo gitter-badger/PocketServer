@@ -1,15 +1,16 @@
 package com.pocketserver.player;
 
-import java.net.InetAddress;
+import java.net.InetSocketAddress;
 
 import com.pocketserver.entity.living.LivingEntity;
 
 public class Player extends LivingEntity {
-	private final InetAddress address;
+	
+	private final InetSocketAddress address;
     private GameMode gameMode = GameMode.SURVIVAL;
     private String name;
 
-    public Player(int entityId, InetAddress address) {
+    public Player(int entityId, InetSocketAddress address) {
     	super(entityId);
         this.address = address;
     }
@@ -30,7 +31,7 @@ public class Player extends LivingEntity {
 
     }
 
-    public InetAddress getAddress() {
+    public InetSocketAddress getAddress() {
         return address;
     }
 
