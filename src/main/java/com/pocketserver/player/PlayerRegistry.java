@@ -4,12 +4,12 @@ import java.net.InetSocketAddress;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class PlayerRegistery {
+public class PlayerRegistry {
 	
-    private static final PlayerRegistery INSTANCE = new PlayerRegistery();
+    private static final PlayerRegistry INSTANCE = new PlayerRegistry();
     private final Map<InetSocketAddress, Player> playerMap = new ConcurrentHashMap<>();
 
-    public static PlayerRegistery get() {
+    public static PlayerRegistry get() {
         return INSTANCE;
     }
 
