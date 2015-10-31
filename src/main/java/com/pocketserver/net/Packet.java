@@ -17,6 +17,8 @@ public abstract class Packet {
 	public static final long MAGIC_1 = 0x00ffff00fefefefeL;
 	public static final long MAGIC_2 = 0xfdfdfdfd12345678L;
 	
+	int id = -1;
+	
 	public final void writeMagic(ByteBuf buf) {
 		buf.writeLong(MAGIC_1);
 		buf.writeLong(MAGIC_2);
@@ -37,10 +39,10 @@ public abstract class Packet {
 	
     public final int getPacketID() {
     	PacketID id = getClass().getAnnotation(PacketID.class);
-    	return id == null ? -1 : id.value()[0];
+    	return this.id == -1 ? (id == null ? -1 : id.value()[0]) : this.id;
     }
     
     public abstract void decode(ChannelHandlerContext ctx, DatagramPacket dg);
-    public abstract DatagramPacket encode(DatagramPacket buf);
+    public abstract DatagramPacket encode(DatagramPacket dg);
 
 }

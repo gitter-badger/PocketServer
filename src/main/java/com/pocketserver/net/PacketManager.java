@@ -52,6 +52,9 @@ public class PacketManager {
 				e.printStackTrace();
 			}
 		}
+		if (pack != null) {
+			pack.id = id;
+		}
 		return pack;
 	}
 }
