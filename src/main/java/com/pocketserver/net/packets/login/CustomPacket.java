@@ -18,7 +18,7 @@ public class CustomPacket extends Packet {
 		private int id;
 		private boolean count, unknown;
 		
-		private EncapsulationStrategy(int id, boolean count, boolean unknown) {
+		EncapsulationStrategy(int id, boolean count, boolean unknown) {
 			this.id = id;
 			this.count = count;
 			this.unknown = unknown;

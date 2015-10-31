@@ -1,5 +1,6 @@
 package com.pocketserver;
 
+import com.pocketserver.event.EventBus;
 import com.pocketserver.net.netty.PocketServerHandler;
 
 import io.netty.bootstrap.Bootstrap;
@@ -11,10 +12,17 @@ import io.netty.channel.socket.nio.NioDatagramChannel;
 public class PocketServer {
 	
 	private static PocketServer server;
+	
+	public static PocketServer getServer() {
+		return server;
+	}
 
     public static void main(String[] args) {
         server = new PocketServer();
     }
+    
+    private EventBus eventBus;
+    private boolean running = true;
 
     private PocketServer() {
         EventLoopGroup group = new NioEventLoopGroup();
@@ -31,15 +39,16 @@ public class PocketServer {
             e.printStackTrace();
         } finally {
             group.shutdownGracefully();
+            running = false;
         }
     }
 	
-	public static PocketServer getServer() {
-		return server;
+	public boolean isRunning() {
+		return running;
 	}
 	
-	public boolean isRunning() {
-		return true;
+	public EventBus getEventBus() {
+		return eventBus;
 	}
 
 }
