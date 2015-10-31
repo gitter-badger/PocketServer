@@ -1,5 +1,6 @@
 package com.pocketserver.net;
 
+import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 
@@ -50,8 +51,12 @@ public abstract class Packet {
     public abstract void decode(ChannelHandlerContext ctx, DatagramPacket dg);
     public abstract DatagramPacket encode(DatagramPacket dg);
     
-	public void send(Player player) {
-		player.getChannelContext().writeAndFlush(encode(new DatagramPacket(Unpooled.buffer(), player.getAddress())));
+    public void send(ChannelHandlerContext ctx, InetSocketAddress addr) {
+		ctx.writeAndFlush(encode(new DatagramPacket(Unpooled.buffer(), addr)));
+	}
+    
+    public void send(Player player) {
+		send(player.getChannelContext(), player.getAddress());
 	}
 	
 }
