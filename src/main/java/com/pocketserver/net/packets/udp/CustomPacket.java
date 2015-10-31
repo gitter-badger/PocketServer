@@ -1,4 +1,4 @@
-package com.pocketserver.net.packets.login;
+package com.pocketserver.net.packets.udp;
 
 import com.google.common.base.Preconditions;
 import com.pocketserver.net.Packet;
@@ -75,7 +75,7 @@ public class CustomPacket extends Packet {
 			byte[] packet_data = new byte[packet_bytes+1];
 			packet_data[0] = packet_id;
 			dg.content().readBytes(packet_data, 1, packet_bytes);
-			packet = PacketManager.getInstance().createPacket(packet_id);
+			packet = PacketManager.getInstance().createGamePacket(packet_id);
 			if (packet != null)
 				packet.decode(ctx, new DatagramPacket(Unpooled.copiedBuffer(packet_data).readerIndex(1), dg.recipient(), dg.sender()));
 			ctx.writeAndFlush(AcknowledgedPacket.one(0, num).encode(new DatagramPacket(Unpooled.buffer(), dg.sender())));

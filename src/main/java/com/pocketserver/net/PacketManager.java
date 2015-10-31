@@ -3,10 +3,15 @@ package com.pocketserver.net;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pocketserver.net.packets.connect.ClientConnectPacket;
 import com.pocketserver.net.packets.login.OpenConnectionRequestAPacket;
 import com.pocketserver.net.packets.login.OpenConnectionRequestBPacket;
 import com.pocketserver.net.packets.login.UnconnectedPingPacket;
+import com.pocketserver.net.packets.message.ChatPacket;
 import com.pocketserver.net.packets.ping.PingPacket;
+import com.pocketserver.net.packets.udp.AcknowledgedPacket;
+import com.pocketserver.net.packets.udp.CustomPacket;
+import com.pocketserver.net.packets.udp.NotAcknowledgedPacket;
 
 public class PacketManager {
 	
@@ -15,32 +20,75 @@ public class PacketManager {
     public static PacketManager getInstance() {
         return INSTANCE;
     }
+
+    private final Map<Integer, Class<? extends Packet>> loginPacketIds = new HashMap<>();
+    private final Map<Integer, Class<? extends Packet>> gamePacketIds = new HashMap<>();
     
-    private final Map<Integer, Class<? extends Packet>> packetIds = new HashMap<>();
     private final Map<Integer, Packet> sentPackets = new HashMap<>();
     private int lastSent = 0;
 
     {
-    	register(PingPacket.class);
-    	register(UnconnectedPingPacket.class);
-
-    	register(OpenConnectionRequestAPacket.class);
-    	register(OpenConnectionRequestBPacket.class);
+    	registerLoginPacket(PingPacket.class);
+    	registerLoginPacket(UnconnectedPingPacket.class);
+    	registerLoginPacket(OpenConnectionRequestAPacket.class);
+    	registerLoginPacket(OpenConnectionRequestBPacket.class);
+    	registerLoginPacket(CustomPacket.class);
+    	registerLoginPacket(AcknowledgedPacket.class);
+    	registerLoginPacket(NotAcknowledgedPacket.class);
+    	
+    	registerGamePacket(ChatPacket.class);
+    	registerGamePacket(ClientConnectPacket.class);
     }
     
-    void register(Class<? extends Packet> clazz) {
+    void registerLoginPacket(Class<? extends Packet> clazz) {
     	PacketID id = clazz.getAnnotation(PacketID.class);
     	if (id != null)
     		for (int i : id.value())
-    			packetIds.put(i, clazz);
+    			loginPacketIds.put(i, clazz);
     }
     
-    public Class<? extends Packet> getPacketClass(int id) {
-        return packetIds.get(id);
+    public Class<? extends Packet> getLoginPacketClass(int id) {
+        return loginPacketIds.get(id);
     }
 
-	public Packet createPacket(int id) {
-		Class<? extends Packet> clazz = getPacketClass(id);
+	public Packet createLoginPacket(int id) {
+		Class<? extends Packet> clazz = getLoginPacketClass(id);
+		if (clazz == null)
+			return null;
+		Packet pack = null;
+		try {
+			pack = clazz.getConstructor().newInstance();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		if (pack == null) {
+			try {
+				pack = clazz.newInstance();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		if (pack != null) {
+			pack.id = id;
+		}
+		return pack;
+	}
+    
+    void registerGamePacket(Class<? extends Packet> clazz) {
+    	PacketID id = clazz.getAnnotation(PacketID.class);
+    	if (id != null)
+    		for (int i : id.value())
+    			gamePacketIds.put(i, clazz);
+    }
+    
+    public Class<? extends Packet> getGamePacketClass(int id) {
+        return gamePacketIds.get(id);
+    }
+
+	public Packet createGamePacket(int id) {
+		Class<? extends Packet> clazz = getGamePacketClass(id);
+		if (clazz == null)
+			return null;
 		Packet pack = null;
 		try {
 			pack = clazz.getConstructor().newInstance();

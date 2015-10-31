@@ -16,7 +16,7 @@ public class PocketServerHandler extends SimpleChannelInboundHandler<DatagramPac
 		ByteBuf buf = msg.content();
         byte id = buf.readByte();
         System.out.println("PacketID sent: " + id);
-		Packet packet = PacketManager.getInstance().createPacket(id);
+		Packet packet = PacketManager.getInstance().createLoginPacket(id);
 		if (packet != null) // if null, then there's no packet with that id!
 			packet.decode(ctx, msg);
 	}

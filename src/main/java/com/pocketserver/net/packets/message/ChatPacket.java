@@ -25,7 +25,7 @@ public class ChatPacket extends InPacket {
         PocketServer.getServer().getEventBus().post(event);
         if (event.isCancelled())
         	return;
-        player.chat(message);
+        player.chat(event.getMessage());
     }
     
 }
