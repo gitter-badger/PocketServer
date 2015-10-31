@@ -1,21 +1,23 @@
 package com.pocketserver.net;
 
+import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
 
 public abstract class Packet {
 	
-	public static final long TEMP_SERVERID = 0x00000000372cdc9eL;
-	public static final String TEMP_IDENTIFIER = "MCPE;Steve;2 7;0.11.0;0;20";
+	protected static final long TEMP_SERVERID = 0x00000000372cdc9eL;
+	protected static final String TEMP_IDENTIFIER = "MCPE;Steve;2 7;0.11.0;0;20";
 	
-	public static final Pattern ALLOWED_CHARS = Pattern.compile("[" + Pattern.quote("!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~") + "]");
-	public static final Pattern DISALLOWED_CHARS = Pattern.compile("[^" + Pattern.quote("!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~") + "]");
-	public static final long MAGIC_1 = 0x00ffff00fefefefeL;
-	public static final long MAGIC_2 = 0xfdfdfdfd12345678L;
+	protected static final Pattern ALLOWED_CHARS = Pattern.compile("[" + Pattern.quote("!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~") + "]");
+	protected static final Pattern DISALLOWED_CHARS = Pattern.compile("[^" + Pattern.quote("!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~") + "]");
+	protected static final long MAGIC_1 = 0x00ffff00fefefefeL;
+	protected static final long MAGIC_2 = 0xfdfdfdfd12345678L;
 	
 	int id = -1;
 	
@@ -45,4 +47,7 @@ public abstract class Packet {
     public abstract void decode(ChannelHandlerContext ctx, DatagramPacket dg);
     public abstract DatagramPacket encode(DatagramPacket dg);
 
+	public DatagramPacket createDatagramPacket(InetSocketAddress address) {
+		return new DatagramPacket(Unpooled.buffer(),address);
+	}
 }
