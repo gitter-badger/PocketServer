@@ -12,12 +12,15 @@ import io.netty.channel.socket.DatagramPacket;
 @PacketID(0x05)
 public class OpenConnectionRequestAPacket extends InPacket {
 
+	byte proto;
+	int mtu;
+	
 	@Override
 	public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
 		ByteBuf buf = dg.content();
         if (buf.readLong() == Packet.MAGIC_1 && buf.readLong() == Packet.MAGIC_2) {
-        	byte proto = buf.readByte();
-        	int mtu = 0;
+        	proto = buf.readByte();
+        	mtu = 0;
         	while (buf.discardReadBytes().readableBytes() > 0 && buf.readByte() == 0x00)
         		mtu++;
         	if (proto == Protocol.RAKNET) {

@@ -9,9 +9,11 @@ import io.netty.channel.socket.DatagramPacket;
 @PacketID(0xB5)
 public class ChatPacket extends InPacket {
 	
+	String message;
+	
     @Override
     public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
-    	String message = readString(dg.content());
+    	message = readString(dg.content());
     }
     
 }

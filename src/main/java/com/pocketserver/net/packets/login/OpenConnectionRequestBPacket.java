@@ -12,15 +12,20 @@ import io.netty.channel.socket.DatagramPacket;
 @PacketID(0x07)
 public class OpenConnectionRequestBPacket extends InPacket {
 
+	byte sec;
+	int cookie;
+	short port, mtu;
+	long clientId;
+	
 	@Override
 	public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
 		ByteBuf buf = dg.content();
         if (buf.readLong() == Packet.MAGIC_1 && buf.readLong() == Packet.MAGIC_2) {
-        	byte sec = buf.readByte();
-        	int cookie = buf.readInt();
-        	short port = buf.readShort();
-        	short mtu = buf.readShort();
-        	long clientID = buf.readLong();
+        	sec = buf.readByte();
+        	cookie = buf.readInt();
+        	port = buf.readShort();
+        	mtu = buf.readShort();
+        	clientId = buf.readLong();
         	
         	OpenConnectionReplyBPacket reply = new OpenConnectionReplyBPacket(mtu, dg.sender().getPort());
         	ctx.write(reply.encode(new DatagramPacket(Unpooled.buffer(), dg.sender())));
