@@ -17,6 +17,8 @@ public class PacketManager {
     }
     
     private final Map<Integer, Class<? extends Packet>> packetIds = new HashMap<>();
+    private final Map<Integer, Packet> sentPackets = new HashMap<>();
+    private int lastSent = 0;
 
     {
     	register(PingPacket.class);
@@ -57,4 +59,17 @@ public class PacketManager {
 		}
 		return pack;
 	}
+	
+	public void save(Packet packet) {
+		sentPackets.put(this.lastSent++, packet);
+	}
+
+	public int getSentAmount() {
+		return lastSent;
+	}
+
+	public Packet getSavedPacket(int id) {
+		return sentPackets.get(id);
+	}
+	
 }

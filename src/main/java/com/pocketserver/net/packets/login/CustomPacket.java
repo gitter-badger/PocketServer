@@ -33,38 +33,37 @@ public class CustomPacket extends Packet {
 		
 	}
 	
-	private int packetId = 0x80, count = 0, cap_count = 0, cap_unknown = 0;
+	private int packetId = 0x80, cap_count = 0, cap_unknown = 0;
 	private EncapsulationStrategy strategy;
 	private Packet packet = null;
 	
-	private CustomPacket(int packetId, EncapsulationStrategy strategy, int count, int cap_count, int cap_unknown, Packet packet) {
+	private CustomPacket(int packetId, EncapsulationStrategy strategy, int cap_count, int cap_unknown, Packet packet) {
 		Preconditions.checkArgument(0x80 <= packetId && packetId <= 0x8F, "Packet ID must be in range 0x80 to 0x8F for custom packets.");
 		Preconditions.checkNotNull(packet, "Packet cannot be null.");
 		this.packetId = packetId;
-		this.count = count;
 		this.strategy = strategy;
 		this.cap_count = cap_count;
 		this.cap_unknown = cap_unknown;
 		this.packet = packet;
 	}
 	
-	public static CustomPacket newBarePacket(int packetId, int count, Packet packet) {
-		return new CustomPacket(packetId, EncapsulationStrategy.BARE, count, 0, 0, packet);
+	public static CustomPacket newBarePacket(int packetId, Packet packet) {
+		return new CustomPacket(packetId, EncapsulationStrategy.BARE, 0, 0, packet);
 	}
 	
-	public static CustomPacket newCountPacket(int packetId, int count, int cap_count, Packet packet) {
-		return new CustomPacket(packetId, EncapsulationStrategy.COUNT, count, cap_count, 0, packet);
+	public static CustomPacket newCountPacket(int packetId, int cap_count, Packet packet) {
+		return new CustomPacket(packetId, EncapsulationStrategy.COUNT, cap_count, 0, packet);
 	}
 	
-	public static CustomPacket newCountUnknownPacket(int packetId, int count, int cap_count, int cap_unknown, Packet packet) {
-		return new CustomPacket(packetId, EncapsulationStrategy.COUNT_UNKNOWN, count, cap_count, cap_unknown, packet);
+	public static CustomPacket newCountUnknownPacket(int packetId, int cap_count, int cap_unknown, Packet packet) {
+		return new CustomPacket(packetId, EncapsulationStrategy.COUNT_UNKNOWN, cap_count, cap_unknown, packet);
 	}
 
 	public CustomPacket() {} // no-args for decoding
 	
 	@Override
 	public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
-		count = dg.content().readMedium();
+		int num = dg.content().readMedium();
 		byte encapsulation = dg.content().readByte();
 		short packet_bits = dg.content().readShort();
 		short packet_bytes = (short) (packet_bits / 8);
@@ -79,13 +78,15 @@ public class CustomPacket extends Packet {
 			Packet pack = PacketManager.getInstance().createPacket(packet_id);
 			if (pack != null)
 				pack.decode(ctx, new DatagramPacket(Unpooled.copiedBuffer(packet_data).readerIndex(1), dg.recipient(), dg.sender()));
+			ctx.writeAndFlush(AcknowledgedPacket.one(0, num).encode(new DatagramPacket(Unpooled.buffer(), dg.sender())));
 		}
 	}
 
 	@Override
 	public DatagramPacket encode(DatagramPacket dg) {
+		PacketManager.getInstance().save(packet);
 		dg.content().writeByte(packetId);
-		dg.content().writeMedium(count);
+		dg.content().writeMedium(PacketManager.getInstance().getSentAmount());
 		dg.content().writeByte(strategy.id);
 		if (strategy.count) {
 			dg.content().writeMedium(cap_count);
