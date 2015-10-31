@@ -3,9 +3,13 @@ package com.pocketserver.player;
 import java.net.InetSocketAddress;
 
 import com.pocketserver.entity.living.LivingEntity;
+import com.pocketserver.net.packets.message.MessagePacket;
+
+import io.netty.channel.ChannelHandlerContext;
 
 public class Player extends LivingEntity {
 	
+	private ChannelHandlerContext ctx;
 	private final InetSocketAddress address;
     private GameMode gameMode = GameMode.SURVIVAL;
     private String name;
@@ -15,8 +19,8 @@ public class Player extends LivingEntity {
         this.address = address;
     }
 
-    public void sendMessage() {
-
+    public void sendMessage(String message) {
+    	new MessagePacket(message).send(this);
     }
 
     public GameMode getGameMode() {
@@ -33,6 +37,10 @@ public class Player extends LivingEntity {
 
     public InetSocketAddress getAddress() {
         return address;
+    }
+    
+    public ChannelHandlerContext getChannelContext() {
+    	return ctx;
     }
 
     public String getName() {

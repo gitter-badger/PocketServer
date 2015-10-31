@@ -1,8 +1,10 @@
 package com.pocketserver.net;
 
-import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
+
+import com.google.common.base.Preconditions;
+import com.pocketserver.player.Player;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -27,8 +29,9 @@ public abstract class Packet {
 	}
 
 	public final void writeString(ByteBuf buf, String str) {
-		buf.writeShort(str.length());
+		Preconditions.checkNotNull(str, "Cannot write a null string.");
 		str = DISALLOWED_CHARS.matcher(str).replaceAll("");
+		buf.writeShort(str.length());
 		buf.writeBytes(str.getBytes(StandardCharsets.US_ASCII));
 	}
 	
@@ -46,8 +49,9 @@ public abstract class Packet {
     
     public abstract void decode(ChannelHandlerContext ctx, DatagramPacket dg);
     public abstract DatagramPacket encode(DatagramPacket dg);
-
-	public DatagramPacket createDatagramPacket(InetSocketAddress address) {
-		return new DatagramPacket(Unpooled.buffer(),address);
+    
+	public void send(Player player) {
+		player.getChannelContext().writeAndFlush(encode(new DatagramPacket(Unpooled.buffer(), player.getAddress())));
 	}
+	
 }

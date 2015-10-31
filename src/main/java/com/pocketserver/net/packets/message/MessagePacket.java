@@ -2,19 +2,31 @@ package com.pocketserver.net.packets.message;
 
 import com.pocketserver.net.Packet;
 import com.pocketserver.net.PacketID;
+
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
 
 @PacketID(0x85)
 public class MessagePacket extends Packet {
 
+	String message;
+	
+	public MessagePacket(String message) {
+		this.message = message;
+	}
+	
+	public MessagePacket() {} // no-args for decoding
+	
     @Override
     public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
-
+    	message = readString(dg.content());
     }
 
     @Override
     public DatagramPacket encode(DatagramPacket dg) {
-        return null;
+    	dg.content().writeByte(getPacketID());
+    	writeString(dg.content(), message);
+        return dg;
     }
+    
 }

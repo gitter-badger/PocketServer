@@ -14,6 +14,8 @@ public class NotAcknowledgedPacket extends Packet {
 	private int unknown, pkt_id1, pkt_id2;
 	private boolean single;
 	
+	public NotAcknowledgedPacket() {} // no-args for decoding
+	
 	private NotAcknowledgedPacket(int unknown, int pkt_id1, int pkt_id2, boolean single) {
 		this.pkt_id1 = pkt_id1;
 		this.pkt_id2 = pkt_id2;
