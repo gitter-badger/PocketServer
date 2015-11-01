@@ -1,5 +1,7 @@
 package com.pocketserver;
 
+import java.net.BindException;
+
 import com.pocketserver.event.EventBus;
 import com.pocketserver.net.netty.PocketServerHandler;
 
@@ -39,8 +41,14 @@ public class PocketServer {
             Channel ch = boot.bind(19132).sync().channel();
             System.out.println("Successfully bound to *:19132");
             ch.closeFuture().await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        } catch (Exception ex) {
+        	if (ex instanceof BindException) {
+        		System.out.println("Failed to bind to port (19132 is in use)");
+        	} else {
+        		throw ex;
+        	}
         } finally {
             System.out.println("Goodbye.");
             group.shutdownGracefully();

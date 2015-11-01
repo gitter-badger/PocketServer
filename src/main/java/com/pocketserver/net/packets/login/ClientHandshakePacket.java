@@ -12,9 +12,9 @@ public class ClientHandshakePacket extends InPacket {
 	private static final int COOKIE = 0x43f57fe;
 	private static final byte SECURITY = (byte) 0xcd;
 	
-	private short port;
-	private short timestamp;
-	private long session, session2;
+	short port;
+	short timestamp;
+	long session, session2;
 	
 	@Override
 	public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {

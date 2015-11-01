@@ -17,21 +17,22 @@ public class ServerHandshakePacket extends OutPacket {
 	
 	@Override
 	public DatagramPacket encode(DatagramPacket dg) {
-		dg.content().writeInt(getPacketID());
-		dg.content().writeInt(0x043f57fe);
-		dg.content().writeByte(0xcd);
+		dg.content().writeByte(getPacketID());
+		// 04 85 6A 55 6E D7 10
+		dg.content().writeInt(0x04856a55);
+		dg.content().writeByte(0x6E);
 		dg.content().writeShort(19132);
 		writeDataArray(dg.content());
 		dg.content().writeShort(0x0000);
 		dg.content().writeLong(session);
 		for (int i = 0; i < 4; i++)
 			dg.content().writeByte(0x00);
-		dg.content().writeInt(0x04440BA9);
+		dg.content().writeInt(0x00699B14);
 		return dg;
 	}
 	
 	private void writeDataArray(ByteBuf buf) {
-        byte[] unknown1 = new byte[] { (byte) 0xF5, (byte) 0xFF, (byte) 0xFF, (byte) 0xF5 };
+        byte[] unknown1 = new byte[] { (byte) 0x80, (byte) 0xFF, (byte) 0xFF, (byte) 0xFE };
         byte[] unknown2 = new byte[] { (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF };
         buf.writeMedium(unknown1.length);
         buf.writeBytes(unknown1);

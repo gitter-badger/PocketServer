@@ -13,7 +13,7 @@ import io.netty.channel.socket.DatagramPacket;
 public class CustomPacket extends Packet {
 	
 	public enum EncapsulationStrategy {
-		BARE(0x00, false, false), COUNT(0x40, true, false), COUNT_UNKNOWN(0x80, true, true);
+		BARE(0x00, false, false), COUNT(0x40, true, false), COUNT_UNKNOWN(0x60, true, true);
 		
 		private int id;
 		private boolean count, unknown;
@@ -63,6 +63,14 @@ public class CustomPacket extends Packet {
 	
 	@Override
 	public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
+		/*
+		while (dg.content().readableBytes() > 0) {
+			String s = Integer.toHexString(dg.content().readByte()).toUpperCase();
+			if (s.length() < 2) s = "0" + s;
+			System.out.print((s.length() > 2 ? s.substring(s.length() - 2, s.length()) : s) + " ");
+		}
+		System.out.println();
+		*/
 		num = dg.content().readMedium();
 		byte encapsulation = dg.content().readByte();
 		short packet_bits = dg.content().readShort();
@@ -77,8 +85,13 @@ public class CustomPacket extends Packet {
 			packet_data[0] = packet_id;
 			dg.content().readBytes(packet_data, 1, packet_bytes-1);
 			packet = PacketManager.getInstance().createGamePacket(packet_id);
-			if (packet != null)
+			System.out.format("Received game packet ID 0x%s", packet_id < 10 ? "0" + String.format("%X", packet_id) : String.format("%X", packet_id));
+			if (packet != null) {
+				System.out.format(", type = %s\n", packet.getClass().getSimpleName());
 				packet.decode(ctx, new DatagramPacket(Unpooled.copiedBuffer(packet_data).readerIndex(1), dg.recipient(), dg.sender()));
+			} else {
+				System.out.println();
+			}
 			AcknowledgedPacket.one(1, num).sendLogin(ctx, dg.sender());
 		}
 	}
