@@ -1,9 +1,11 @@
 package com.pocketserver;
 
+import java.io.PrintStream;
 import java.net.BindException;
 
 import com.pocketserver.event.EventBus;
 import com.pocketserver.net.netty.PocketServerHandler;
+import com.pocketserver.plugin.PluginLoader;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -25,10 +27,17 @@ public class PocketServer {
     }
     
     private final EventBus eventBus;
+    private final PluginLoader pluginLoader;
     private boolean running = true;
 
     private PocketServer() {
+
+    	// Recreate STDOUT and STDERR to have Auto-Flush on, so any newline chars flush them.
+    	System.setOut(new PrintStream(System.out, true));
+    	System.setErr(new PrintStream(System.err, true));
+    	
         this.eventBus = new EventBus();
+        this.pluginLoader = new PluginLoader();
         EventLoopGroup group = new NioEventLoopGroup();
         try {
             Bootstrap boot = new Bootstrap();
@@ -39,7 +48,11 @@ public class PocketServer {
                     .option(ChannelOption.SO_BROADCAST, true);
             }
             Channel ch = boot.bind(19132).sync().channel();
+            System.out.println("Loading plugins..");
+            pluginLoader.loadPlugins();
+            System.out.println("Done loading plugins.");
             System.out.println("Successfully bound to *:19132");
+            System.out.println("Server is done loading!");
             ch.closeFuture().await();
         } catch (InterruptedException ex) {
             ex.printStackTrace();
