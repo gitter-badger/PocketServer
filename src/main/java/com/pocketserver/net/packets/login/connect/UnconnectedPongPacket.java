@@ -25,7 +25,7 @@ public class UnconnectedPongPacket extends OutPacket {
     public DatagramPacket encode(DatagramPacket buf) {
         buf.content().writeByte(packetId);
         buf.content().writeLong(id);
-        buf.content().writeLong(TEMP_SERVERID);
+        buf.content().writeLong(TEMP_SERVER_ID);
         writeMagic(buf.content());
         writeString(buf.content(), TEMP_IDENTIFIER);
         System.out.println(TEMP_IDENTIFIER);

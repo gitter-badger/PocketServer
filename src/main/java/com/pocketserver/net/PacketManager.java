@@ -6,7 +6,7 @@ import java.util.Map;
 import com.pocketserver.net.packets.login.ClientCancelConnectPacket;
 import com.pocketserver.net.packets.login.ClientConnectPacket;
 import com.pocketserver.net.packets.login.ClientHandshakePacket;
-import com.pocketserver.net.packets.login.LoginPacket;
+import com.pocketserver.net.packets.login.LoginInfoPacket;
 import com.pocketserver.net.packets.login.connect.OpenConnectionRequestAPacket;
 import com.pocketserver.net.packets.login.connect.OpenConnectionRequestBPacket;
 import com.pocketserver.net.packets.login.connect.UnconnectedPingPacket;
@@ -43,7 +43,7 @@ public class PacketManager {
     	registerGamePacket(ClientConnectPacket.class);
     	registerGamePacket(ClientHandshakePacket.class);
     	registerGamePacket(ClientCancelConnectPacket.class);
-		registerGamePacket(LoginPacket.class);
+		registerGamePacket(LoginInfoPacket.class);
     }
     
     void registerLoginPacket(Class<? extends Packet> clazz) {
@@ -73,9 +73,6 @@ public class PacketManager {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
-		if (pack != null) {
-			pack.id = id;
 		}
 		return pack;
 	}
@@ -108,9 +105,6 @@ public class PacketManager {
 				e.printStackTrace();
 			}
 		}
-		if (pack != null) {
-			pack.id = id;
-		}
 		return pack;
 	}
 	
@@ -119,7 +113,7 @@ public class PacketManager {
 			return -1;
 		int id = lastSent++;
 		sentPackets.put(id, packet);
-		System.out.println("Saved " + packet.getClass().getSimpleName() +  " as " + id);
+		System.out.println("Saved " + packet.getClass().getSimpleName() + " as " + id);
 		return id;
 	}
 

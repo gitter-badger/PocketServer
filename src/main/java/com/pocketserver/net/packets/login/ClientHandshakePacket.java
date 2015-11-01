@@ -9,13 +9,12 @@ import io.netty.channel.socket.DatagramPacket;
 @PacketID(0x13)
 public class ClientHandshakePacket extends InPacket {
 
-	private static final int COOKIE = 0x43f57fe;
-	private static final byte SECURITY = (byte) 0xcd;
+	private static final int COOKIE = 0x043F57FE;
+	private static final byte SECURITY = (byte) 0xCD;
 	
 	short port;
 	short timestamp;
 	long session, session2;
-	
 	@Override
 	public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
 		if (dg.content().readInt() != COOKIE && dg.content().readByte() != SECURITY)
