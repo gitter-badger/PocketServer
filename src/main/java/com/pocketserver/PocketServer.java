@@ -47,10 +47,10 @@ public class PocketServer {
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true);
             }
-            Channel ch = boot.bind(19132).sync().channel();
             System.out.println("Loading plugins..");
             pluginLoader.loadPlugins();
             System.out.println("Done loading plugins.");
+            Channel ch = boot.bind(19132).sync().channel();
             System.out.println("Successfully bound to *:19132");
             System.out.println("Server is done loading!");
             ch.closeFuture().await();
@@ -64,8 +64,8 @@ public class PocketServer {
         	}
         } finally {
             System.out.println("Goodbye.");
-            group.shutdownGracefully();
             pluginLoader.disablePlugins();
+            group.shutdownGracefully();
             running = false;
         }
     }
