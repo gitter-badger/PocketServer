@@ -18,11 +18,12 @@ public class OpenConnectionRequestAPacket extends InPacket {
 	@Override
 	public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
 		ByteBuf buf = dg.content();
-        if (buf.readLong() == Packet.MAGIC_1 && buf.readLong() == Packet.MAGIC_2) {
+		long magic1 = buf.readLong();
+		long magic2 = buf.readLong();
+        if (magic1 == Packet.MAGIC_1 && magic2 == Packet.MAGIC_2) {
         	proto = buf.readByte();
-        	mtu = 0;
-        	while (buf.discardReadBytes().readableBytes() > 0 && buf.readByte() == 0x00)
-        		mtu++;
+        	mtu = buf.readableBytes();
+        	System.out.println(proto + " : " + mtu);
         	if (proto == Protocol.RAKNET) {
         		ctx.write(new OpenConnectionReplyAPacket(mtu).encode(new DatagramPacket(Unpooled.buffer(), dg.sender())));
         	} else {

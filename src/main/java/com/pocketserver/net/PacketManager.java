@@ -3,7 +3,9 @@ package com.pocketserver.net;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pocketserver.net.packets.connect.ClientCancelConnectPacket;
 import com.pocketserver.net.packets.connect.ClientConnectPacket;
+import com.pocketserver.net.packets.connect.ClientHandshakePacket;
 import com.pocketserver.net.packets.login.OpenConnectionRequestAPacket;
 import com.pocketserver.net.packets.login.OpenConnectionRequestBPacket;
 import com.pocketserver.net.packets.login.UnconnectedPingPacket;
@@ -28,16 +30,18 @@ public class PacketManager {
     private int lastSent = 0;
 
     {
-    	registerLoginPacket(PingPacket.class);
     	registerLoginPacket(UnconnectedPingPacket.class);
     	registerLoginPacket(OpenConnectionRequestAPacket.class);
     	registerLoginPacket(OpenConnectionRequestBPacket.class);
     	registerLoginPacket(CustomPacket.class);
     	registerLoginPacket(AcknowledgedPacket.class);
     	registerLoginPacket(NotAcknowledgedPacket.class);
-    	
+
+    	registerGamePacket(PingPacket.class);
     	registerGamePacket(ChatPacket.class);
     	registerGamePacket(ClientConnectPacket.class);
+    	registerGamePacket(ClientHandshakePacket.class);
+    	registerGamePacket(ClientCancelConnectPacket.class);
     }
     
     void registerLoginPacket(Class<? extends Packet> clazz) {

@@ -4,6 +4,7 @@ import com.pocketserver.event.EventBus;
 import com.pocketserver.net.netty.PocketServerHandler;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -27,17 +28,20 @@ public class PocketServer {
     private PocketServer() {
         EventLoopGroup group = new NioEventLoopGroup();
         try {
-            Bootstrap bootstrap = new Bootstrap();
+            Bootstrap boot = new Bootstrap();
             {
-                bootstrap.group(group);
-                bootstrap.handler(new PocketServerHandler());
-                bootstrap.channel(NioDatagramChannel.class);
-                bootstrap.option(ChannelOption.SO_BROADCAST, true);
+                boot.group(group)
+                    .handler(new PocketServerHandler())
+                    .channel(NioDatagramChannel.class)
+                    .option(ChannelOption.SO_BROADCAST, true);
             }
-            bootstrap.bind(19132).sync().channel().closeFuture().await();
+            Channel ch = boot.bind(19132).sync().channel();
+            System.out.println("Successfully bound to *:19132");
+            ch.closeFuture().await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
+            System.out.println("Goodbye.");
             group.shutdownGracefully();
             running = false;
         }
