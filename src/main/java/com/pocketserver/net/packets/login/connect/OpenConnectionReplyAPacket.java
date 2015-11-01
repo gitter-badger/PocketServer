@@ -8,7 +8,7 @@ import io.netty.channel.socket.DatagramPacket;
 @PacketID(0x06)
 public class OpenConnectionReplyAPacket extends OutPacket {
 
-	private int mtu;
+	private final int mtu;
 	
 	protected OpenConnectionReplyAPacket(int mtu) {
 		this.mtu = mtu;
@@ -16,9 +16,9 @@ public class OpenConnectionReplyAPacket extends OutPacket {
 	
 	@Override
 	public DatagramPacket encode(DatagramPacket dg) {
-		dg.content().writeByte(this.getPacketID());
+		dg.content().writeByte(0x06);
 		writeMagic(dg.content());
-		dg.content().writeLong(TEMP_SERVERID);
+		dg.content().writeLong(TEMP_SERVER_ID);
 		dg.content().writeByte(0);
 		dg.content().writeShort(mtu);
 		return dg;

@@ -55,5 +55,4 @@ public class PocketServer {
 	public EventBus getEventBus() {
 		return eventBus;
 	}
-
 }

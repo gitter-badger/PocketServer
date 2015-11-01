@@ -6,8 +6,16 @@ import io.netty.channel.socket.DatagramPacket;
 
 @PacketID(0x83)
 public class LoginStatusPacket extends OutPacket {
+    private final int statusCode;
+
+    public LoginStatusPacket(int statusCode) {
+        this.statusCode = statusCode;
+    }
+
     @Override
     public DatagramPacket encode(DatagramPacket dg) {
-        return null;
+        dg.content().writeInt(getPacketID());
+        dg.content().writeInt(statusCode);
+        return dg;
     }
 }
