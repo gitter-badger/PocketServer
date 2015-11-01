@@ -16,6 +16,7 @@ import java.util.jar.JarFile;
 public class PluginLoader {
 	
 	private final Set<Plugin> plugins = new HashSet<>();
+	private final Set<URLClassLoader> loaders = new HashSet<>();
 	
     public void loadPlugins() {
         File pluginDirectory = new File("plugins");
@@ -39,6 +40,7 @@ public class PluginLoader {
     private void loadPlugins(File file) {
         try (JarFile jarFile = new JarFile(file)) {
             URLClassLoader cl = new URLClassLoader(new URL[] { file.toURI().toURL() } );
+            loaders.add(cl);
             List<Plugin> found = new ArrayList<>();
             Enumeration<JarEntry> entries = jarFile.entries();
             double highest = 0;
@@ -96,6 +98,8 @@ public class PluginLoader {
     public void disablePlugins() {
     	for (Plugin plugin : plugins)
     		plugin.onDisable();
+    	plugins.clear();
+    	loaders.clear();
     }
     
 }

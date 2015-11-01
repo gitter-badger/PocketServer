@@ -2,6 +2,8 @@ package com.pocketserver;
 
 import java.io.PrintStream;
 import java.net.BindException;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import com.pocketserver.event.EventBus;
 import com.pocketserver.net.netty.PocketServerHandler;
@@ -53,7 +55,15 @@ public class PocketServer {
             Channel ch = boot.bind(19132).sync().channel();
             System.out.println("Successfully bound to *:19132");
             System.out.println("Server is done loading!");
-            ch.closeFuture().await();
+            Scanner scanner = new Scanner(System.in);
+            scanner.useDelimiter(Pattern.compile("[\\r\\n]"));
+            while (true) {
+            	String line = scanner.nextLine().trim().replaceAll("\\s+", " ");
+            	if (line.equals("stop")) {
+            		break;
+            	}
+            }
+            //ch.closeFuture().await();
         } catch (InterruptedException ex) {
             ex.printStackTrace();
         } catch (Exception ex) {
@@ -63,8 +73,8 @@ public class PocketServer {
         		throw ex;
         	}
         } finally {
-            System.out.println("Goodbye.");
             pluginLoader.disablePlugins();
+            System.out.println("Goodbye.");
             group.shutdownGracefully();
             running = false;
         }
