@@ -65,6 +65,7 @@ public class PocketServer {
         } finally {
             System.out.println("Goodbye.");
             group.shutdownGracefully();
+            pluginLoader.disablePlugins();
             running = false;
         }
     }

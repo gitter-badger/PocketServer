@@ -7,11 +7,15 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class PluginLoader {
+	
+	private final Set<Plugin> plugins = new HashSet<>();
 	
     public void loadPlugins() {
         File pluginDirectory = new File("plugins");
@@ -28,14 +32,14 @@ public class PluginLoader {
         });
         for (File file : files) {
         	System.out.println("Found plugin file: " + file.getName());
-            loadPlugin(file);
+            loadPlugins(file);
         }
     }
 
-    private void loadPlugin(File file) {
+    private void loadPlugins(File file) {
         try (JarFile jarFile = new JarFile(file)) {
             URLClassLoader cl = new URLClassLoader(new URL[] { file.toURI().toURL() } );
-            List<Plugin> plugins = new ArrayList<>();
+            List<Plugin> found = new ArrayList<>();
             Enumeration<JarEntry> entries = jarFile.entries();
             double highest = 0;
             while (entries.hasMoreElements()) {
@@ -45,7 +49,7 @@ public class PluginLoader {
 						Class<?> clazz = cl.loadClass(entry.replace('/', '.').substring(0, entry.length() - 6));
 						if (Plugin.class.isAssignableFrom(clazz)) {
 							try {
-								plugins.add(clazz.asSubclass(Plugin.class).newInstance());
+								found.add(clazz.asSubclass(Plugin.class).newInstance());
 							} catch (InstantiationException | IllegalAccessException e) {
 								e.printStackTrace();
 							}
@@ -62,11 +66,17 @@ public class PluginLoader {
             	}
             }
             if (highest == 0)
-            	if (plugins.isEmpty())
+            	if (found.isEmpty())
             		System.err.format("No classes extending Plugin found in %s. Not loading.\n", file.getName());
             	else
-            		for (Plugin plugin : plugins)
-            			plugin.onEnable();
+            		for (Plugin plugin : found) {
+            			try {
+            				plugin.onEnable();
+            				plugins.add(plugin);
+            			} catch (Exception ex) {
+            				ex.printStackTrace();
+            			}
+            		}
             else {
             	String version;
             	if (highest == 52.0)
@@ -81,6 +91,11 @@ public class PluginLoader {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    public void disablePlugins() {
+    	for (Plugin plugin : plugins)
+    		plugin.onDisable();
     }
     
 }
