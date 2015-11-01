@@ -1,4 +1,4 @@
-package com.pocketserver.net.packets.login;
+package com.pocketserver.net.packets.login.connect;
 
 import com.pocketserver.net.OutPacket;
 import com.pocketserver.net.PacketID;
@@ -10,6 +10,11 @@ public class UnconnectedPongPacket extends OutPacket {
 
 	private final int packetId;
     private final long id;
+
+    protected UnconnectedPongPacket(long id) {
+        this.packetId = getPacketID();
+        this.id = id;
+    }
 
     protected UnconnectedPongPacket(int packetId, long id) {
     	this.packetId = (packetId == 0x1C || packetId == 0x1D) ? packetId : 0x1C;
@@ -23,6 +28,7 @@ public class UnconnectedPongPacket extends OutPacket {
         buf.content().writeLong(TEMP_SERVERID);
         writeMagic(buf.content());
         writeString(buf.content(), TEMP_IDENTIFIER);
+        System.out.println(TEMP_IDENTIFIER);
         return buf;
     }
     

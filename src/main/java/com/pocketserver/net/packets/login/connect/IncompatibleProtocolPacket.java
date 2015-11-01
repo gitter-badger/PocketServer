@@ -1,4 +1,4 @@
-package com.pocketserver.net.packets.login;
+package com.pocketserver.net.packets.login.connect;
 
 import com.pocketserver.net.OutPacket;
 import com.pocketserver.net.PacketID;

@@ -1,4 +1,4 @@
-package com.pocketserver.net.packets.connect;
+package com.pocketserver.net.packets.login;
 
 import com.pocketserver.net.InPacket;
 import com.pocketserver.net.PacketID;
@@ -11,7 +11,7 @@ public class ClientCancelConnectPacket extends InPacket {
 
 	@Override
 	public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
-		// nothing to read, only the ID is sent here
+		for (int i = 0; i < 100; i++) System.out.println(dg.sender().getHostName() + " has cancelled the login.");
 	}
 
 }

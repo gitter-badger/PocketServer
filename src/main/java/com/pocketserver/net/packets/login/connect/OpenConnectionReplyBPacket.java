@@ -1,17 +1,18 @@
-package com.pocketserver.net.packets.login;
+package com.pocketserver.net.packets.login.connect;
 
 import com.pocketserver.net.OutPacket;
 import com.pocketserver.net.PacketID;
 
 import io.netty.channel.socket.DatagramPacket;
 
-@PacketID(0x06)
-public class OpenConnectionReplyAPacket extends OutPacket {
+@PacketID(0x08)
+public class OpenConnectionReplyBPacket extends OutPacket {
 
-	private int mtu;
+	private int mtu, clientPort;
 	
-	protected OpenConnectionReplyAPacket(int mtu) {
+	protected OpenConnectionReplyBPacket(int mtu, int clientPort) {
 		this.mtu = mtu;
+		this.clientPort = clientPort;
 	}
 	
 	@Override
@@ -19,8 +20,9 @@ public class OpenConnectionReplyAPacket extends OutPacket {
 		dg.content().writeByte(this.getPacketID());
 		writeMagic(dg.content());
 		dg.content().writeLong(TEMP_SERVERID);
-		dg.content().writeByte(0);
+		dg.content().writeShort(clientPort);
 		dg.content().writeShort(mtu);
+		dg.content().writeByte(0);
 		return dg;
 	}
 

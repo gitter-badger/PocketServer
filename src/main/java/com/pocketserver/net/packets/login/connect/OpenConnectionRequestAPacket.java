@@ -1,4 +1,4 @@
-package com.pocketserver.net.packets.login;
+package com.pocketserver.net.packets.login.connect;
 
 import com.pocketserver.net.InPacket;
 import com.pocketserver.net.Packet;
@@ -11,8 +11,8 @@ import io.netty.channel.socket.DatagramPacket;
 @PacketID(0x05)
 public class OpenConnectionRequestAPacket extends InPacket {
 
-	byte proto;
-	int mtu;
+	private byte proto;
+	private int mtu;
 	
 	@Override
 	public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {

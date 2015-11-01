@@ -12,7 +12,7 @@ import io.netty.channel.socket.DatagramPacket;
 @PacketID({ 0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E, 0x8F })
 public class CustomPacket extends Packet {
 	
-	public static enum EncapsulationStrategy {
+	public enum EncapsulationStrategy {
 		BARE(0x00, false, false), COUNT(0x40, true, false), COUNT_UNKNOWN(0x80, true, true);
 		
 		private int id;

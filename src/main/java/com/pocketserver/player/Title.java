@@ -1,10 +1,5 @@
 package com.pocketserver.player;
 
-import com.pocketserver.net.packets.message.TitlePacket;
-
-import io.netty.buffer.Unpooled;
-import io.netty.channel.socket.DatagramPacket;
-
 public class Title {
     private final String topLine; //TODO RENAME THESE
     private final String bottomLine;
@@ -29,7 +24,8 @@ public class Title {
     }
 
     public void send(Player player) {
-        TitlePacket packet = new TitlePacket();
-        packet.encode(new DatagramPacket(Unpooled.buffer(), player.getAddress()));
+        //TODO: How do we send these?
+        //TitlePacket packet = new TitlePacket();
+        //packet.encode(new DatagramPacket(Unpooled.buffer(), player.getAddress()));
     }
 }

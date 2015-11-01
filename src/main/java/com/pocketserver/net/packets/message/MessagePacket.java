@@ -9,7 +9,7 @@ import io.netty.channel.socket.DatagramPacket;
 @PacketID(0x85)
 public class MessagePacket extends Packet {
 
-	String message;
+	private String message;
 	
 	public MessagePacket(String message) {
 		this.message = message;

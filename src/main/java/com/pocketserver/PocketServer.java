@@ -22,10 +22,11 @@ public class PocketServer {
         server = new PocketServer();
     }
     
-    private EventBus eventBus;
+    private final EventBus eventBus;
     private boolean running = true;
 
     private PocketServer() {
+        this.eventBus = new EventBus();
         EventLoopGroup group = new NioEventLoopGroup();
         try {
             Bootstrap boot = new Bootstrap();

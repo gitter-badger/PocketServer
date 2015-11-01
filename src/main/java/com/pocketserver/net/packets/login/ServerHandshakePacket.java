@@ -1,4 +1,4 @@
-package com.pocketserver.net.packets.connect;
+package com.pocketserver.net.packets.login;
 
 import com.pocketserver.net.OutPacket;
 import com.pocketserver.net.PacketID;
@@ -40,5 +40,4 @@ public class ServerHandshakePacket extends OutPacket {
         	buf.writeBytes(unknown2);
         }
     }
-
 }

@@ -1,4 +1,4 @@
-package com.pocketserver.net.packets.connect;
+package com.pocketserver.net.packets.login;
 
 import com.pocketserver.net.InPacket;
 import com.pocketserver.net.PacketID;
@@ -9,18 +9,16 @@ import io.netty.channel.socket.DatagramPacket;
 @PacketID(0x13)
 public class ClientHandshakePacket extends InPacket {
 
-	final int cookie = 0x43f57fe;
-	final byte security = (byte) 0xcd;
+	private static final int COOKIE = 0x43f57fe;
+	private static final byte SECURITY = (byte) 0xcd;
 	
-	short port;
-	short timestamp;
-	long session, session2;
+	private short port;
+	private short timestamp;
+	private long session, session2;
 	
 	@Override
 	public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
-		if (dg.content().readInt() != 0x43f57fe)
-			return;
-		if (dg.content().readByte() != 0xcd)
+		if (dg.content().readInt() != COOKIE && dg.content().readByte() != SECURITY)
 			return;
 		port = dg.content().readShort();
 		dg.content().readBytes(new byte[(int) dg.content().readByte()]);

@@ -3,12 +3,13 @@ package com.pocketserver.net;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.pocketserver.net.packets.connect.ClientCancelConnectPacket;
-import com.pocketserver.net.packets.connect.ClientConnectPacket;
-import com.pocketserver.net.packets.connect.ClientHandshakePacket;
-import com.pocketserver.net.packets.login.OpenConnectionRequestAPacket;
-import com.pocketserver.net.packets.login.OpenConnectionRequestBPacket;
-import com.pocketserver.net.packets.login.UnconnectedPingPacket;
+import com.pocketserver.net.packets.login.ClientCancelConnectPacket;
+import com.pocketserver.net.packets.login.ClientConnectPacket;
+import com.pocketserver.net.packets.login.ClientHandshakePacket;
+import com.pocketserver.net.packets.login.LoginPacket;
+import com.pocketserver.net.packets.login.connect.OpenConnectionRequestAPacket;
+import com.pocketserver.net.packets.login.connect.OpenConnectionRequestBPacket;
+import com.pocketserver.net.packets.login.connect.UnconnectedPingPacket;
 import com.pocketserver.net.packets.message.ChatPacket;
 import com.pocketserver.net.packets.ping.PingPacket;
 import com.pocketserver.net.packets.udp.AcknowledgedPacket;
@@ -42,6 +43,7 @@ public class PacketManager {
     	registerGamePacket(ClientConnectPacket.class);
     	registerGamePacket(ClientHandshakePacket.class);
     	registerGamePacket(ClientCancelConnectPacket.class);
+		registerGamePacket(LoginPacket.class);
     }
     
     void registerLoginPacket(Class<? extends Packet> clazz) {
