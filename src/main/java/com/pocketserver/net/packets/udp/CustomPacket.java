@@ -33,11 +33,11 @@ public class CustomPacket extends Packet {
 		
 	}
 	
-	private int packetId = 0x80, cap_count = 0, cap_unknown = 0;
-	private EncapsulationStrategy strategy;
-	private Packet packet = null;
+	int packetId, cap_count, cap_unknown, num;
+	EncapsulationStrategy strategy;
+    Packet packet = null;
 	
-	private CustomPacket(int packetId, EncapsulationStrategy strategy, int cap_count, int cap_unknown, Packet packet) {
+	public CustomPacket(int packetId, EncapsulationStrategy strategy, int cap_count, int cap_unknown, Packet packet) {
 		Preconditions.checkArgument(0x80 <= packetId && packetId <= 0x8F, "Packet ID must be in range 0x80 to 0x8F for custom packets.");
 		Preconditions.checkNotNull(packet, "Packet cannot be null.");
 		this.packetId = packetId;
@@ -63,13 +63,12 @@ public class CustomPacket extends Packet {
 	
 	@Override
 	public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
-		System.out.println("Interesting...");
-		int num = dg.content().readMedium();
+		num = dg.content().readMedium();
 		byte encapsulation = dg.content().readByte();
 		short packet_bits = dg.content().readShort();
 		short packet_bytes = (short) (packet_bits / 8);
 		strategy = EncapsulationStrategy.get(encapsulation);
-		System.out.format("Received custom packet %X, num = %d, strat = %X\n", getPacketID(), num, encapsulation);
+		System.out.format("Received custom packet %X, num = %d, strat = %X, bytes = %d\n", getPacketID(), num, encapsulation, dg.content().readableBytes());
 		if (strategy != null) {
 			cap_count = strategy.count ? dg.content().readMedium() : 0;
 			cap_unknown = strategy.unknown ? dg.content().readInt() : 0;
@@ -80,7 +79,7 @@ public class CustomPacket extends Packet {
 			packet = PacketManager.getInstance().createGamePacket(packet_id);
 			if (packet != null)
 				packet.decode(ctx, new DatagramPacket(Unpooled.copiedBuffer(packet_data).readerIndex(1), dg.recipient(), dg.sender()));
-			ctx.writeAndFlush(AcknowledgedPacket.one(0, num).encode(new DatagramPacket(Unpooled.buffer(), dg.sender())));
+			AcknowledgedPacket.one(1, num).sendLogin(ctx, dg.sender());
 		}
 	}
 

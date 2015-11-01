@@ -112,8 +112,13 @@ public class PacketManager {
 		return pack;
 	}
 	
-	public void save(Packet packet) {
-		sentPackets.put(this.lastSent++, packet);
+	public int save(Packet packet) {
+		if (packet == null)
+			return -1;
+		int id = lastSent++;
+		sentPackets.put(id, packet);
+		System.out.println("Saved " + packet.getClass().getSimpleName() +  " as " + id);
+		return id;
 	}
 
 	public int getSentAmount() {

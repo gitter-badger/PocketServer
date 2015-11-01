@@ -54,7 +54,7 @@ public abstract class Packet {
     public abstract DatagramPacket encode(DatagramPacket dg);
     
 	public Packet sendLogin(ChannelHandlerContext ctx, InetSocketAddress addr) {
-		System.out.println("Sending " + getClass().getSimpleName());
+		System.out.println("Sending login packet " + getClass().getSimpleName());
 		ctx.writeAndFlush(encode(new DatagramPacket(Unpooled.buffer(), addr)));
 		return this;
 	}
@@ -64,8 +64,8 @@ public abstract class Packet {
 	}
     
 	public Packet sendGame(int customPacketId, ChannelHandlerContext ctx, InetSocketAddress addr) {
-		System.out.println("Sending " + getClass().getSimpleName());
-		CustomPacket.newBarePacket(customPacketId, this).sendLogin(ctx, addr);
+		System.out.println("Sending game packet " + getClass().getSimpleName());
+		new CustomPacket(customPacketId, CustomPacket.EncapsulationStrategy.BARE, 0, 1, this).sendLogin(ctx, addr);
 		return this;
 	}
     

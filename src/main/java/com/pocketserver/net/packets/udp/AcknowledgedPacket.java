@@ -1,5 +1,7 @@
 package com.pocketserver.net.packets.udp;
 
+import java.net.InetSocketAddress;
+
 import com.pocketserver.net.Packet;
 import com.pocketserver.net.PacketID;
 
@@ -45,6 +47,13 @@ public class AcknowledgedPacket extends Packet {
 		if (!single)
 			dg.content().writeMedium(pkt_id2);
 		return dg;
+	}
+	
+	@Override
+	public Packet sendLogin(ChannelHandlerContext ctx, InetSocketAddress addr) {
+		super.sendLogin(ctx, addr);
+		System.out.format("ACK send: unknown = %d, pkt_id1 = %d, pkt_id2 = %d\n", unknown, pkt_id1, pkt_id2);
+		return this;
 	}
 
 }

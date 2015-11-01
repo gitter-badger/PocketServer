@@ -14,6 +14,6 @@ public class PingPacket extends InPacket {
     @Override
     public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
     	identifier = dg.content().readLong();
-        new PongPacket(identifier).sendLogin(ctx, dg.sender());
+        new PongPacket(identifier).sendGame(0x84, ctx, dg.sender());
     }
 }
