@@ -18,7 +18,7 @@ public class ClientConnectPacket extends InPacket {
 		session = dg.content().readLong();
 		unknown = dg.content().readByte();
 		
-		new ServerHandshakePacket(session).send(ctx, dg.sender());
+		new ServerHandshakePacket(session).sendGame(0x84, ctx, dg.sender());
 	}
 
 }

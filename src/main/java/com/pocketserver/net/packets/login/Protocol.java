@@ -4,6 +4,6 @@ public final class Protocol {
 	
 	private Protocol() {}
 	
-	public static final int RAKNET = 5;
+	public static final int RAKNET = 7;
 
 }

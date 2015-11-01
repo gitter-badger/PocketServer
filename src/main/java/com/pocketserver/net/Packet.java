@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 
 import com.google.common.base.Preconditions;
+import com.pocketserver.net.packets.udp.CustomPacket;
 import com.pocketserver.player.Player;
 
 import io.netty.buffer.ByteBuf;
@@ -15,10 +16,11 @@ import io.netty.channel.socket.DatagramPacket;
 public abstract class Packet {
 	
 	protected static final long TEMP_SERVERID = 0x00000000372cdc9eL;
-	protected static final String TEMP_IDENTIFIER = "MCPE;Steve;2 7;0.11.0;0;20";
+	protected static final String TEMP_IDENTIFIER = "MCPE;Survival Games!;7;0.12.3;0;20";
 	
 	protected static final Pattern ALLOWED_CHARS = Pattern.compile("[" + Pattern.quote("!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~") + "]");
 	protected static final Pattern DISALLOWED_CHARS = Pattern.compile("[^" + Pattern.quote("!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~") + "]");
+	
 	protected static final long MAGIC_1 = 0x00ffff00fefefefeL;
 	protected static final long MAGIC_2 = 0xfdfdfdfd12345678L;
 	
@@ -51,12 +53,24 @@ public abstract class Packet {
     public abstract void decode(ChannelHandlerContext ctx, DatagramPacket dg);
     public abstract DatagramPacket encode(DatagramPacket dg);
     
-    public void send(ChannelHandlerContext ctx, InetSocketAddress addr) {
+	public Packet sendLogin(ChannelHandlerContext ctx, InetSocketAddress addr) {
+		System.out.println("Sending " + getClass().getSimpleName());
 		ctx.writeAndFlush(encode(new DatagramPacket(Unpooled.buffer(), addr)));
+		return this;
 	}
     
-    public void send(Player player) {
-		send(player.getChannelContext(), player.getAddress());
+    public Packet sendLogin(Player player) {
+		return sendLogin(player.getChannelContext(), player.getAddress());
+	}
+    
+	public Packet sendGame(int customPacketId, ChannelHandlerContext ctx, InetSocketAddress addr) {
+		System.out.println("Sending " + getClass().getSimpleName());
+		CustomPacket.newBarePacket(customPacketId, this).sendLogin(ctx, addr);
+		return this;
+	}
+    
+    public Packet sendGame(int customPacketId, Player player) {
+		return sendGame(customPacketId, player.getChannelContext(), player.getAddress());
 	}
 	
 }

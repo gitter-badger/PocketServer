@@ -63,18 +63,20 @@ public class CustomPacket extends Packet {
 	
 	@Override
 	public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
+		System.out.println("Interesting...");
 		int num = dg.content().readMedium();
 		byte encapsulation = dg.content().readByte();
 		short packet_bits = dg.content().readShort();
 		short packet_bytes = (short) (packet_bits / 8);
 		strategy = EncapsulationStrategy.get(encapsulation);
+		System.out.format("Received custom packet %X, num = %d, strat = %X\n", getPacketID(), num, encapsulation);
 		if (strategy != null) {
 			cap_count = strategy.count ? dg.content().readMedium() : 0;
 			cap_unknown = strategy.unknown ? dg.content().readInt() : 0;
 			byte packet_id = dg.content().readByte();
 			byte[] packet_data = new byte[packet_bytes+1];
 			packet_data[0] = packet_id;
-			dg.content().readBytes(packet_data, 1, packet_bytes);
+			dg.content().readBytes(packet_data, 1, packet_bytes-1);
 			packet = PacketManager.getInstance().createGamePacket(packet_id);
 			if (packet != null)
 				packet.decode(ctx, new DatagramPacket(Unpooled.copiedBuffer(packet_data).readerIndex(1), dg.recipient(), dg.sender()));

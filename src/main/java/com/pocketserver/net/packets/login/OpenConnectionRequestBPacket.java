@@ -5,7 +5,6 @@ import com.pocketserver.net.Packet;
 import com.pocketserver.net.PacketID;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
 
@@ -27,9 +26,7 @@ public class OpenConnectionRequestBPacket extends InPacket {
         	mtu = buf.readShort();
         	clientId = buf.readLong();
         	
-        	OpenConnectionReplyBPacket reply = new OpenConnectionReplyBPacket(mtu, dg.sender().getPort());
-        	ctx.write(reply.encode(new DatagramPacket(Unpooled.buffer(), dg.sender())));
-        	ctx.flush();
+        	new OpenConnectionReplyBPacket(mtu, dg.sender().getPort()).sendLogin(ctx, dg.sender());
         }
 	}
 

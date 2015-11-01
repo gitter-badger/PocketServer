@@ -5,7 +5,6 @@ import com.pocketserver.net.Packet;
 import com.pocketserver.net.PacketID;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
 
@@ -23,13 +22,12 @@ public class OpenConnectionRequestAPacket extends InPacket {
         if (magic1 == Packet.MAGIC_1 && magic2 == Packet.MAGIC_2) {
         	proto = buf.readByte();
         	mtu = buf.readableBytes();
-        	System.out.println(proto + " : " + mtu);
+        	System.out.println("Proto = " + proto + ", MTU = " + mtu);
         	if (proto == Protocol.RAKNET) {
-        		ctx.write(new OpenConnectionReplyAPacket(mtu).encode(new DatagramPacket(Unpooled.buffer(), dg.sender())));
+        		new OpenConnectionReplyAPacket(mtu).sendLogin(ctx, dg.sender());
         	} else {
-        		ctx.write(new IncompatibleProtocolPacket().encode(new DatagramPacket(Unpooled.buffer(), dg.sender())));
+        		new IncompatibleProtocolPacket().sendLogin(ctx, dg.sender());
         	}
-        	ctx.flush();
         }
 	}
 

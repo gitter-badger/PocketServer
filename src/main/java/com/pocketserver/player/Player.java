@@ -20,7 +20,7 @@ public class Player extends LivingEntity {
     }
 
     public void sendMessage(String message) {
-    	new MessagePacket(message).send(this);
+    	new MessagePacket(message).sendLogin(this);
     }
 
     public GameMode getGameMode() {

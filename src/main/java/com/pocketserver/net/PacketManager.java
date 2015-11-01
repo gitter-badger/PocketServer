@@ -23,8 +23,8 @@ public class PacketManager {
         return INSTANCE;
     }
 
-    private final Map<Integer, Class<? extends Packet>> loginPacketIds = new HashMap<>();
-    private final Map<Integer, Class<? extends Packet>> gamePacketIds = new HashMap<>();
+    private final Map<Byte, Class<? extends Packet>> loginPacketIds = new HashMap<>();
+    private final Map<Byte, Class<? extends Packet>> gamePacketIds = new HashMap<>();
     
     private final Map<Integer, Packet> sentPackets = new HashMap<>();
     private int lastSent = 0;
@@ -48,14 +48,14 @@ public class PacketManager {
     	PacketID id = clazz.getAnnotation(PacketID.class);
     	if (id != null)
     		for (int i : id.value())
-    			loginPacketIds.put(i, clazz);
+    			loginPacketIds.put((byte) i, clazz);
     }
     
-    public Class<? extends Packet> getLoginPacketClass(int id) {
+    public Class<? extends Packet> getLoginPacketClass(byte id) {
         return loginPacketIds.get(id);
     }
 
-	public Packet createLoginPacket(int id) {
+	public Packet createLoginPacket(byte id) {
 		Class<? extends Packet> clazz = getLoginPacketClass(id);
 		if (clazz == null)
 			return null;
@@ -82,14 +82,14 @@ public class PacketManager {
     	PacketID id = clazz.getAnnotation(PacketID.class);
     	if (id != null)
     		for (int i : id.value())
-    			gamePacketIds.put(i, clazz);
+    			gamePacketIds.put((byte) i, clazz);
     }
     
-    public Class<? extends Packet> getGamePacketClass(int id) {
+    public Class<? extends Packet> getGamePacketClass(byte id) {
         return gamePacketIds.get(id);
     }
 
-	public Packet createGamePacket(int id) {
+	public Packet createGamePacket(byte id) {
 		Class<? extends Packet> clazz = getGamePacketClass(id);
 		if (clazz == null)
 			return null;

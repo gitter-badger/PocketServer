@@ -5,7 +5,6 @@ import com.pocketserver.net.Packet;
 import com.pocketserver.net.PacketID;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
 
@@ -17,8 +16,7 @@ public class UnconnectedPingPacket extends InPacket {
         ByteBuf content = dg.content();
         UnconnectedPongPacket packet = new UnconnectedPongPacket(0x1C, content.readLong());
         if (content.readLong() == Packet.MAGIC_1 && content.readLong() == Packet.MAGIC_2)
-        	ctx.write(packet.encode(new DatagramPacket(Unpooled.buffer(), dg.sender())));
-	    ctx.flush();
+        	packet.sendLogin(ctx, dg.sender());
     }
     
 }
