@@ -1,13 +1,9 @@
 package com.pocketserver.example.plugin;
 
-import com.pocketserver.plugin.Dependency;
-import com.pocketserver.plugin.Description;
-import com.pocketserver.plugin.Name;
 import com.pocketserver.plugin.Plugin;
+import com.pocketserver.plugin.PluginData;
 
-@Name("Example")
-@Description("I'm the lowest dependency out there!")
-@Dependency("BaseExamplePlugin")
+@PluginData(name = "BaseExample", version = "1.0.0", description = "A low example dependency")
 public class BaseExamplePlugin extends Plugin {
 	
 	@Override

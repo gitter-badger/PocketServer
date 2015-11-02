@@ -6,10 +6,12 @@ import com.pocketserver.plugin.Dependency;
 import com.pocketserver.plugin.Description;
 import com.pocketserver.plugin.Name;
 import com.pocketserver.plugin.Plugin;
+import com.pocketserver.plugin.Version;
 
 @Name("Example")
+@Version("1.0.1")
 @Description("An example plugin showing off what can be done!")
-@Dependency("BaseExamplePlugin")
+@Dependency("BaseExample")
 public class ExamplePlugin extends Plugin {
 	
     @Override
