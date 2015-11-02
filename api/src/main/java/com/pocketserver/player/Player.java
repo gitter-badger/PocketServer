@@ -47,7 +47,8 @@ public class Player extends LivingEntity {
         return name;
     }
 
-    public void setName(String name) {
+    public Player setName(String name) {
         this.name = name;
+        return this;
     }
 }

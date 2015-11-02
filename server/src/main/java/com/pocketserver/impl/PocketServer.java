@@ -4,9 +4,11 @@ import java.io.PrintStream;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import com.pocketserver.Server;
 //import com.pocketserver.impl.event.EventBus;
 import com.pocketserver.impl.net.netty.PocketServerHandler;
 //import com.pocketserver.plugin.PluginLoader;
+import com.pocketserver.plugin.PluginLoader;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -16,20 +18,10 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 
 public class PocketServer {
-	
-	private static PocketServer server;
-	
-	public static PocketServer getServer() {
-		return server;
-	}
 
     public static void main(String[] args) {
-        server = new PocketServer();
+        new PocketServer();
     }
-    
-    //private final EventBus eventBus;
-    //private final PluginLoader pluginLoader;
-    private boolean running = true;
 
     private PocketServer() {
 
@@ -37,8 +29,6 @@ public class PocketServer {
     	System.setOut(new PrintStream(System.out, true));
     	System.setErr(new PrintStream(System.err, true));
     	
-        //this.eventBus = new EventBus();
-        //this.pluginLoader = new PluginLoader();
         EventLoopGroup group = new NioEventLoopGroup();
         try {
             Bootstrap boot = new Bootstrap();
@@ -48,10 +38,8 @@ public class PocketServer {
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true);
             }
-            System.out.println("Loading plugins..");
-            //pluginLoader.loadPlugins();
-            System.out.println("Done loading plugins.");
             Channel ch = boot.bind(19132).sync().channel();
+        	Server.getServer();
             System.out.println("Successfully bound to *:19132");
             System.out.println("Server is done loading!");
             Scanner scanner = new Scanner(System.in);
@@ -70,15 +58,6 @@ public class PocketServer {
             //pluginLoader.disablePlugins();
             System.out.println("Goodbye.");
             group.shutdownGracefully();
-            running = false;
         }
     }
-	
-	public boolean isRunning() {
-		return running;
-	}
-	
-	//public EventBus getEventBus() {
-	//	return eventBus;
-	//}
 }

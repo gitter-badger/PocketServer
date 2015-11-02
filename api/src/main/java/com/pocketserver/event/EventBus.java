@@ -16,7 +16,7 @@ public class EventBus {
         this.eventListeners = new ConcurrentHashMap<>();
     }
 
-    public void registerListener(Plugin plugin,Object listener) {
+    public void registerListener(Plugin plugin, Object listener) {
     	if (listener == null)
     		return;
         for (Method method : listener.getClass().getMethods()) {
@@ -63,7 +63,7 @@ public class EventBus {
     	if (event == null)
     		return null;
         for (Entry<Class<?>, List<EventData>> entry : eventListeners.entrySet()) {
-            if (entry.getKey().isInstance(event)) {
+            if (!entry.getKey().isInstance(event)) {
                 continue;
             }
             for (EventData eventData : entry.getValue()) {

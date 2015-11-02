@@ -5,10 +5,8 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -41,7 +39,7 @@ public class PluginLoader {
         try (JarFile jarFile = new JarFile(file)) {
             URLClassLoader cl = new URLClassLoader(new URL[] { file.toURI().toURL() } );
             loaders.add(cl);
-            List<Plugin> found = new ArrayList<>();
+            Set<Plugin> found = new HashSet<>();
             Enumeration<JarEntry> entries = jarFile.entries();
             double highest = 0;
             while (entries.hasMoreElements()) {
@@ -83,7 +81,10 @@ public class PluginLoader {
             	String version;
             	if (highest == 52.0)
             		version = "Java 8";
-            	else version = "an unsupported version of Java";
+            	else if (highest == 53.0)
+            		version = "Java 9";
+            	else
+            		version = "an unsupported version of Java";
             	System.err.format("Not loading %s because it requires %s.\n", file.getName(), version);
             }
             cl.close();
@@ -93,9 +94,7 @@ public class PluginLoader {
     }
     
     public void disablePlugins() {
-		for (Plugin plugin : plugins) {
-			plugin.onDisable();
-		}
+		plugins.forEach(Plugin::onDisable);
     	plugins.clear();
     	loaders.clear();
     }
