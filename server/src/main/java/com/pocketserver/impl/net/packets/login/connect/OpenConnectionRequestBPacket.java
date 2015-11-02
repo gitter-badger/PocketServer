@@ -11,10 +11,10 @@ import io.netty.channel.socket.DatagramPacket;
 @PacketID(0x07)
 public class OpenConnectionRequestBPacket extends InPacket {
 
-	private byte sec;
-	private int cookie;
-	private short port, mtu;
-	private long clientId;
+	byte sec;
+	int cookie;
+	short port, mtu;
+	long clientId;
 	
 	@Override
 	public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {

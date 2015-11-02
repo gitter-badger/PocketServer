@@ -1,5 +1,6 @@
 package com.pocketserver.impl.net;
 
+import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 import java.util.regex.Pattern;
@@ -31,7 +32,27 @@ public abstract class Packet {
     protected Packet(int id) {
         this.id = id;
     }
-
+    
+    public final Object field(String name) {
+    	try {
+    		Field f = getClass().getField(name);
+    		if (!f.isAccessible())
+    			f.setAccessible(true);
+    		return f.get(this);
+    	} catch (Exception ex) {
+    		return null;
+    	}
+    }
+    
+    public final Packet field(String name, Object obj) {
+    	try {
+    		Field f = getClass().getField(name);
+    		if (!f.isAccessible())
+    			f.setAccessible(true);
+    		f.set(this, obj);
+    	} catch (Exception ex) {}
+		return this;
+    }
 
     public final void writeMagic(ByteBuf buf) {
 		buf.writeLong(MAGIC_1);
