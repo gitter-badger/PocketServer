@@ -3,7 +3,7 @@ package com.pocketserver.player;
 import java.net.InetSocketAddress;
 
 import com.pocketserver.entity.living.LivingEntity;
-import com.pocketserver.net.packets.message.MessagePacket;
+import com.pocketserver.impl.net.packets.message.MessagePacket;
 
 import io.netty.channel.ChannelHandlerContext;
 
@@ -20,7 +20,7 @@ public class Player extends LivingEntity {
     }
 
     public void sendMessage(String message) {
-    	new MessagePacket(message).sendLogin(this);
+    	new MessagePacket(message).sendLogin(ctx, address);
     }
 
     public GameMode getGameMode() {

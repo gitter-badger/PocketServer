@@ -93,7 +93,9 @@ public class PluginLoader {
     }
     
     public void disablePlugins() {
-		plugins.forEach(Plugin::onDisable);
+		for (Plugin plugin : plugins) {
+			plugin.onDisable();
+		}
     	plugins.clear();
     	loaders.clear();
     }
