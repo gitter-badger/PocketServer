@@ -1,15 +1,13 @@
 package com.pocketserver.entity;
 
-public abstract class Entity {
-	
-    private final int entityId;
+import com.pocketserver.world.Vector;
 
-    protected Entity(int entityId) {
-        this.entityId = entityId;
-    }
+public interface Entity {
 
-    public int getEntityId() {
-        return entityId;
-    }
+    int getEntityId();
+
+    Vector getVelocity();
+
+    void setVelocity(Vector velocity);
     
 }

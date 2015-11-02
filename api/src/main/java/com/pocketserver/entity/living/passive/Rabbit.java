@@ -1,4 +1,6 @@
 package com.pocketserver.entity.living.passive;
 
-public class Rabbit {
+import com.pocketserver.entity.Entity;
+
+public interface Rabbit extends Entity {
 }
