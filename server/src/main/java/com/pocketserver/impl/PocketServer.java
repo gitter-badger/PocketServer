@@ -62,6 +62,7 @@ public class PocketServer {
             		break;
             	}
             }
+            scanner.close();
             //ch.closeFuture().await();
         } catch (InterruptedException ex) {
             ex.printStackTrace();
