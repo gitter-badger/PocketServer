@@ -3,7 +3,7 @@ package com.pocketserver.impl;
 import com.pocketserver.impl.concurrent.ConsoleThread;
 import com.pocketserver.impl.net.netty.PocketServerHandler;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -30,7 +30,7 @@ public class PocketServer {
     	System.setOut(new PrintStream(System.out, true));
     	System.setErr(new PrintStream(System.err, true));
         this.logger = LoggerFactory.getLogger("PocketServer");
-        new ConsoleThread(isRunning());
+        new ConsoleThread(isRunning()).start();
 
         EventLoopGroup group = new NioEventLoopGroup();
         try {
@@ -41,10 +41,11 @@ public class PocketServer {
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true);
             }
-            Channel ch = boot.bind(19132).sync().channel();
+
+            ChannelFuture future = boot.bind(19132).sync();
             System.out.println("Successfully bound to *:19132");
             System.out.println("Server is done loading!");
-            //ch.closeFuture().await();
+            future.channel().closeFuture().sync();
         } catch (InterruptedException ex) {
             ex.printStackTrace();
         } finally {

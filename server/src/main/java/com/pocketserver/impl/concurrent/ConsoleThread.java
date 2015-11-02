@@ -22,6 +22,6 @@ public class ConsoleThread extends Thread {
     }
 
     private void executeCommand(String line) {
-
+        System.out.println("Recieved command: " + line);
     }
 }
