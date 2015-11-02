@@ -17,10 +17,10 @@ import io.netty.channel.socket.DatagramPacket;
 public abstract class Packet {
 	
 	protected static final long TEMP_SERVER_ID = 0x00000000372cdc9e;
-	protected static final String TEMP_IDENTIFIER = "MCPE;Survival Games!;34;0.12.3;0;20";
+	protected static final String TEMP_IDENTIFIER = "MCPE;§cSurvival §dGames§e!;34;0.12.3;0;20";
 	
 	protected static final Pattern DISALLOWED_CHARS = Pattern.compile("[^" + Pattern.quote(
-            " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~") + "]");
+            " !\"§#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~") + "]");
 	
 	protected static final long MAGIC_1 = 0x00ffff00fefefefeL;
 	protected static final long MAGIC_2 = 0xfdfdfdfd12345678L;
