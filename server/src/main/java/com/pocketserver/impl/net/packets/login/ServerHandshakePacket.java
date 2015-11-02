@@ -4,32 +4,31 @@ import com.pocketserver.impl.net.OutPacket;
 import com.pocketserver.impl.net.PacketID;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.socket.DatagramPacket;
+
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 
 @PacketID(0x10)
 public class ServerHandshakePacket extends OutPacket {
-
+    private final long guid;
 	private long session;
 	
-	public ServerHandshakePacket(long session) {
-		this.session = session;
+	public ServerHandshakePacket(long guid, long session) {
+        this.guid = guid;
+        this.session = session;
 	}
-	
+
 	@Override
 	public DatagramPacket encode(DatagramPacket dg) {
-		dg.content().writeByte(getPacketID());
-		// 04 85 6A 55 6E D7 10
-		dg.content().writeInt(0x04856a55);
-		dg.content().writeByte(0x6E);
-		dg.content().writeShort(19132);
-		writeDataArray(dg.content());
-		dg.content().writeShort(0x0000);
-		dg.content().writeLong(session);
-		for (int i = 0; i < 4; i++)
-			dg.content().writeByte(0x00);
-		dg.content().writeInt(0x00699B14);
-		return dg;
-	}
+        ByteBuf content = dg.content();
+        content.writeByte(getPacketID());
+        writeDataArray(content);
+        content.writeLong(guid); //https://github.com/NiclasOlofsson/MiNET/blob/master/src/MiNET/MiNET/Net/Package.cs
+        content.writeLong(session);
+        return dg;
+    }
 	
 	private void writeDataArray(ByteBuf buf) {
         byte[] unknown1 = new byte[] { (byte) 0x80, (byte) 0xFF, (byte) 0xFF, (byte) 0xFE };

@@ -1,32 +1,14 @@
 package com.pocketserver.world;
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
 import com.pocketserver.blocks.Block;
 
-public class World {
-	
-    private final Table<Integer, Integer, Chunk> chunks = HashBasedTable.create();
+public interface World {
 
-    public Chunk getChunk(int x, int z) {
-    	return getChunk(x, z, false);
-    }
+    Chunk getChunk(int x, int z);
     
-    public Chunk getChunk(int cx, int cz, boolean load) {
-    	if (!load || chunks.contains(cx, cz))
-    		return chunks.get(cx, cz);
-    	Chunk c = new Chunk(this, cx, cz);
-    	chunks.put(cx, cz, c);
-    	return c;
-    }
-    
-    public Block getBlockAt(int x,int y, int z) {
-        int cx = x >> 4, cz = z >> 4;
-        Chunk c = getChunk(cx, cz);
-        return c != null ? c.getBlock(x % 16, y, z % 16) : null;
-    }
+    Chunk getChunk(int cx, int cz, boolean load);
 
-    public Block getBlockAt(Location location) {
-        return getBlockAt(location.getBlockX(), location.getBlockY(), location.getBlockZ());
-    }
+    Block getBlockAt(int x, int y, int z);
+
+    Block getBlockAt(Location location);
 }

@@ -1,4 +1,4 @@
 package com.pocketserver.entity;
 
-public class Item {
+public interface Item {
 }
