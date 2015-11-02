@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import com.google.common.base.Preconditions;
 import com.pocketserver.impl.net.packets.udp.CustomPacket;
+import com.pocketserver.impl.net.packets.udp.CustomPacket.EncapsulationStrategy;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -83,9 +84,9 @@ public abstract class Packet {
 		return this;
 	}
     
-	public Packet sendGame(int customPacketId, ChannelHandlerContext ctx, InetSocketAddress address) {
+	public Packet sendGame(int customPacketId, EncapsulationStrategy strat, int count, int unk, ChannelHandlerContext ctx, InetSocketAddress address) {
 		System.out.println("Sending game packet " + getClass().getSimpleName());
-		new CustomPacket(customPacketId, CustomPacket.EncapsulationStrategy.BARE, 0, 1, this).sendLogin(ctx, address);
+		new CustomPacket(customPacketId, strat, count, unk, this).sendLogin(ctx, address);
 		return this;
 	}
 

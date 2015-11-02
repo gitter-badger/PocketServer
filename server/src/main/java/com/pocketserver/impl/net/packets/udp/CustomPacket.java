@@ -100,7 +100,8 @@ public class CustomPacket extends Packet {
 	public DatagramPacket encode(DatagramPacket dg) {
 		PacketManager.getInstance().save(packet);
 		dg.content().writeByte(packetId);
-		dg.content().writeMedium(PacketManager.getInstance().getSentAmount());
+		//dg.content().writeMedium(PacketManager.getInstance().getSentAmount());
+		dg.content().writeMedium(0);
 		dg.content().writeByte(strategy.id);
 		if (strategy.count) {
 			dg.content().writeMedium(cap_count);

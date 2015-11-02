@@ -2,6 +2,7 @@ package com.pocketserver.impl.net.packets.ping;
 
 import com.pocketserver.impl.net.InPacket;
 import com.pocketserver.impl.net.PacketID;
+import com.pocketserver.impl.net.packets.udp.CustomPacket.EncapsulationStrategy;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
@@ -14,6 +15,6 @@ public class PingPacket extends InPacket {
     @Override
     public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
     	identifier = dg.content().readLong();
-        new PongPacket(identifier).sendGame(0x84, ctx, dg.sender());
+        new PongPacket(identifier).sendGame(0x84, EncapsulationStrategy.BARE, 0, 0, ctx, dg.sender());
     }
 }
