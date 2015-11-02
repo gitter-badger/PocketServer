@@ -1,8 +1,8 @@
 package com.pocketserver.world;
 
-import com.pocketserver.blocks.Block;
-
 import java.io.Serializable;
+
+import com.pocketserver.block.Block;
 
 public class Location implements Cloneable, Serializable{
 	

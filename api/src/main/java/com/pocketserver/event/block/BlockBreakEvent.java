@@ -1,6 +1,6 @@
 package com.pocketserver.event.block;
 
-import com.pocketserver.blocks.Block;
+import com.pocketserver.block.Block;
 import com.pocketserver.event.Cancellable;
 import com.pocketserver.event.player.PlayerEvent;
 import com.pocketserver.player.Player;

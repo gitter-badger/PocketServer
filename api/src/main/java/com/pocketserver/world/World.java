@@ -1,6 +1,6 @@
 package com.pocketserver.world;
 
-import com.pocketserver.blocks.Block;
+import com.pocketserver.block.Block;
 
 public interface World {
 

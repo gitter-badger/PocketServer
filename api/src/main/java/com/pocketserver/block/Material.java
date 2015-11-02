@@ -1,4 +1,4 @@
-package com.pocketserver.blocks;
+package com.pocketserver.block;
 
 public enum Material {
     AIR(0),

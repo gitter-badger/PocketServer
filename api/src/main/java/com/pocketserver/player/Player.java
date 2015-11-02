@@ -3,52 +3,19 @@ package com.pocketserver.player;
 import java.net.InetSocketAddress;
 
 import com.pocketserver.entity.living.LivingEntity;
-import com.pocketserver.impl.net.packets.message.MessagePacket;
 
-import io.netty.channel.ChannelHandlerContext;
+public interface Player extends LivingEntity {
 
-public class Player extends LivingEntity {
-	
-	private ChannelHandlerContext ctx;
-	private final InetSocketAddress address;
-    private GameMode gameMode = GameMode.SURVIVAL;
-    private String name;
+    void sendMessage(String message);
 
-    public Player(int entityId, InetSocketAddress address) {
-    	super(entityId);
-        this.address = address;
-    }
+    void chat(String message);
 
-    public void sendMessage(String message) {
-    	new MessagePacket(message).sendLogin(ctx, address);
-    }
+    GameMode getGameMode();
 
-    public GameMode getGameMode() {
-        return gameMode;
-    }
+    void setGameMode(GameMode mode);
 
-    public void setGameMode(GameMode gameMode) {
-        this.gameMode = gameMode;
-    }
+    InetSocketAddress getAddress();
 
-    public void chat(String message) {
-
-    }
-
-    public InetSocketAddress getAddress() {
-        return address;
-    }
+    String getName();
     
-    public ChannelHandlerContext getChannelContext() {
-    	return ctx;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Player setName(String name) {
-        this.name = name;
-        return this;
-    }
 }

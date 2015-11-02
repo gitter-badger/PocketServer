@@ -1,7 +1,7 @@
 package com.pocketserver.example.plugin;
 
 import com.pocketserver.event.player.PlayerChatEvent;
-import com.pocketserver.player.Player;
+import com.pocketserver.impl.player.PocketPlayer;
 import com.pocketserver.plugin.Dependency;
 import com.pocketserver.plugin.Description;
 import com.pocketserver.plugin.Name;
@@ -23,7 +23,7 @@ public class ExamplePlugin extends Plugin {
     		try {
     			Thread.sleep(500);
     		} catch (Exception ex) {}
-    		getEventBus().post(new PlayerChatEvent(new Player(0, null).setName("PlayerName"), "ChatMessage"));
+    		getEventBus().post(new PlayerChatEvent(new PocketPlayer(0, null).setName("PlayerName"), "ChatMessage"));
     	}).start();
     }
     
