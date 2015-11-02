@@ -49,41 +49,27 @@ public class PluginLoader {
         }
         Map<String, Integer> duplicates = new HashMap<>();
         Map<String, Plugin> names = new HashMap<>();
-        Map<String, Boolean> loaded = new HashMap<>();
         Map<String, Set<String>> deps = new WeakHashMap<>();
         found.forEach(p -> {
             if (names.containsKey(p.getName())) {
                 duplicates.put(p.getName(), duplicates.getOrDefault(p.getName(), 1) + 1);
             } else {
                 names.put(p.getName(), p);
-                loaded.put(p.getName(), false);
                 deps.put(p.getName(), Sets.newHashSet(p.getDependencies()));
             }
         });
         duplicates.forEach((s, i) -> {
             System.err.format("Found %d occurrences of plugin %s. Not loading any.\n", i, s);
+            names.remove(s);
+            deps.remove(s);
         });
         found.removeIf(p -> duplicates.containsKey(p.getName()));
-        Set<String> circular = new HashSet<>();
-        for (Plugin p : found) {
-            String pn = p.getName();
-            if (circular.contains(pn))
-                continue;
-            for (Plugin q : found) {
-                String qn = q.getName();
-                if (circular.contains(qn))
-                    continue;
-                if (deps.get(pn).contains(qn) && deps.get(qn).contains(pn)) {
-                    circular.add(pn);
-                    circular.add(qn);
-                    if (pn.equals(qn)) {
-                        System.err.format("Error loading plugin %s: Depends on itself.\n", pn);
-                    } else {
-                        System.err.format("Error loading plugins %s and %s: Depend on eachother.\n", pn, qn);
-                    }
-                }
-            }
-        }
+        Set<String> circular = getCircularDependencies(found, deps);
+        circular.forEach(p -> {
+            System.err.format("Error loading plugin %s: Circular dependencies detected.\n", p);
+            names.remove(p);
+            deps.remove(p);
+        });
         found.removeIf(p -> circular.contains(p.getName()));
         int numLoaded;
         do {
@@ -108,6 +94,27 @@ public class PluginLoader {
             System.err.format("Error loading plugin %s: Dependencies missing: %s\n", p.getName(), deps.get(p.getName()).toString());
         });
         return plugins;
+    }
+
+    public Set<String> getCircularDependencies(Set<Plugin> search, Map<String, Set<String>> deps) {
+        Map<String, Plugin> names = search.stream().collect(Collectors.toMap(p -> p.getName(), p -> p));
+        Set<String> circular = new HashSet<>();
+        for (Plugin plugin : search) {
+            Set<String> upstream = new HashSet<>();
+            Stack<String> toSearch = new Stack<>();
+            toSearch.add(plugin.getName());
+            while (!toSearch.isEmpty()) {
+                String pn = toSearch.pop();
+                Plugin plg = names.get(pn);
+                if (plg != null) {
+                    deps.get(pn).stream().filter(s -> !upstream.contains(s)).forEach(s -> toSearch.add(s));
+                    upstream.addAll(deps.get(pn));
+                }
+            }
+            if (upstream.contains(plugin.getName()))
+                circular.add(plugin.getName());
+        }
+        return circular;
     }
 
     private Set<Plugin> loadPlugins(File file) {

@@ -3,7 +3,7 @@ package com.pocketserver.example.plugin;
 import com.pocketserver.plugin.Plugin;
 import com.pocketserver.plugin.PluginData;
 
-@PluginData(name = "BaseExample", version = "1.0.0", description = "A low example dependency")
+@PluginData(name = "BaseExample", version = "1.0.0", description = "A low example dependency", dependency = "adhaddada")
 public class BaseExamplePlugin extends Plugin {
 
     @Override
