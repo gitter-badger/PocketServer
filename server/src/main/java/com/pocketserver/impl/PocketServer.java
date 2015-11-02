@@ -55,7 +55,7 @@ public class PocketServer {
         } catch (InterruptedException ex) {
             ex.printStackTrace();
         } finally {
-            //pluginLoader.disablePlugins();
+        	Server.getServer().shutdown();
             System.out.println("Goodbye.");
             group.shutdownGracefully();
         }

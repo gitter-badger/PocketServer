@@ -41,5 +41,9 @@ public class Server {
 	public PluginLoader getPluginLoader() {
 		return pluginLoader;
 	}
+
+	public void shutdown() {
+		pluginLoader.disablePlugins();
+	}
 	
 }
