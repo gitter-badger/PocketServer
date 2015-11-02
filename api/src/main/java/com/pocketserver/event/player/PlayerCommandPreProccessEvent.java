@@ -8,7 +8,7 @@ public class PlayerCommandPreProccessEvent extends PlayerEvent implements Cancel
     private final String command;
     private boolean cancelled;
 
-    public PlayerCommandPreProccessEvent(Player player,String command) {
+    public PlayerCommandPreProccessEvent(Player player, String command) {
         super(player);
         this.player = player;
         this.command = command;

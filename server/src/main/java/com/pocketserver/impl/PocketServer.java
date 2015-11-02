@@ -17,18 +17,19 @@ import java.io.PrintStream;
 //import com.pocketserver.plugin.PluginLoader;
 
 public class PocketServer {
-    
+
     public static void main(String[] args) {
         new PocketServer();
     }
-    
+
     private final Logger logger;
 
     private PocketServer() {
 
-    	// Recreate STDOUT and STDERR to have Auto-Flush on, so any newline chars flush them.
-    	System.setOut(new PrintStream(System.out, true));
-    	System.setErr(new PrintStream(System.err, true));
+        // Recreate STDOUT and STDERR to have Auto-Flush on, so any newline
+        // chars flush them.
+        System.setOut(new PrintStream(System.out, true));
+        System.setErr(new PrintStream(System.err, true));
         this.logger = LoggerFactory.getLogger("PocketServer");
         new ConsoleThread(isRunning()).start();
 
@@ -36,10 +37,7 @@ public class PocketServer {
         try {
             Bootstrap boot = new Bootstrap();
             {
-                boot.group(group)
-                    .handler(new PocketServerHandler())
-                    .channel(NioDatagramChannel.class)
-                    .option(ChannelOption.SO_BROADCAST, true);
+                boot.group(group).handler(new PocketServerHandler()).channel(NioDatagramChannel.class).option(ChannelOption.SO_BROADCAST, true);
             }
 
             ChannelFuture future = boot.bind(19132).sync();
@@ -49,7 +47,7 @@ public class PocketServer {
         } catch (InterruptedException ex) {
             ex.printStackTrace();
         } finally {
-        	//Server.getServer().shutdown();
+            // Server.getServer().shutdown();
             System.out.println("Goodbye.");
             group.shutdownGracefully();
         }

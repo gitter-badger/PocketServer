@@ -1,7 +1,7 @@
 package com.pocketserver.player;
 
 public class Title {
-    private final String topLine; //TODO RENAME THESE
+    private final String topLine; // TODO RENAME THESE
     private final String bottomLine;
     private final short fadeDelay;
 
@@ -24,8 +24,9 @@ public class Title {
     }
 
     public void send(Player player) {
-        //TODO: How do we send these?
-        //TitlePacket packet = new TitlePacket();
-        //packet.encode(new DatagramPacket(Unpooled.buffer(), player.getAddress()));
+        // TODO: How do we send these?
+        // TitlePacket packet = new TitlePacket();
+        // packet.encode(new DatagramPacket(Unpooled.buffer(),
+        // player.getAddress()));
     }
 }

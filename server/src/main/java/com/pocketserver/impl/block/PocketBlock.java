@@ -5,11 +5,11 @@ import com.pocketserver.world.Location;
 
 public class PocketBlock implements Block {
 
-	private Location location;
-	
-	@Override
-	public Location getLocation() {
-		return location;
-	}
-    //TODO: Implement a block.
+    private Location location;
+
+    @Override
+    public Location getLocation() {
+        return location;
+    }
+    // TODO: Implement a block.
 }

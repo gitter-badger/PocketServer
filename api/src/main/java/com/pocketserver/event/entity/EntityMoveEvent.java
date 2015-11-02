@@ -7,7 +7,7 @@ public class EntityMoveEvent extends EntityEvent {
     private Location to;
     private final Location from;
 
-    public EntityMoveEvent(Entity entity,Location to,Location from) {
+    public EntityMoveEvent(Entity entity, Location to, Location from) {
         super(entity);
         this.to = to;
         this.from = from;

@@ -13,18 +13,19 @@ import com.pocketserver.plugin.Version;
 @Description("An example plugin showing off what can be done!")
 @Dependency("BaseExample")
 public class ExamplePlugin extends Plugin {
-	
+
     @Override
     public void onEnable() {
-		System.out.println("[Example] Hello, there!");
-    	getEventBus().registerListener(this, new ExampleListener());
-    	
-    	new Thread(() -> {
-    		try {
-    			Thread.sleep(500);
-    		} catch (Exception ex) {}
-    		getEventBus().post(new PlayerChatEvent(new PocketPlayer(0, null).setName("PlayerName"), "ChatMessage"));
-    	}).start();
+        System.out.println("[Example] Hello, there!");
+        getEventBus().registerListener(this, new ExampleListener());
+
+        new Thread(() -> {
+            try {
+                Thread.sleep(500);
+            } catch (Exception ex) {
+            }
+            getEventBus().post(new PlayerChatEvent(new PocketPlayer(0, null).setName("PlayerName"), "ChatMessage"));
+        }).start();
     }
-    
+
 }

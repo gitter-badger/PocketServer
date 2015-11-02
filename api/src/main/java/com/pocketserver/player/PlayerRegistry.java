@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerRegistry {
-	
+
     private static final PlayerRegistry INSTANCE = new PlayerRegistry();
     private final Map<InetSocketAddress, Player> playerMap = new ConcurrentHashMap<>();
 
@@ -14,7 +14,7 @@ public class PlayerRegistry {
     }
 
     public void registerPlayer(Player player) {
-        this.playerMap.put(player.getAddress(),player);
+        this.playerMap.put(player.getAddress(), player);
     }
 
     public void unregisterPlayer(Player player) {
@@ -26,9 +26,9 @@ public class PlayerRegistry {
     }
 
     public Player getPlayer(String name) {
-    	for (Player p : playerMap.values())
-    		if (p.getName().equalsIgnoreCase(name))
-    			return p;
+        for (Player p : playerMap.values())
+            if (p.getName().equalsIgnoreCase(name))
+                return p;
         return null;
     }
 }

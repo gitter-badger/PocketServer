@@ -40,6 +40,6 @@ public enum Material {
     }
 
     public static Material getMaterial(int id) {
-        return values()[id]; //This may stop working. To be determined.
+        return values()[id]; // This may stop working. To be determined.
     }
 }

@@ -9,9 +9,10 @@ import io.netty.channel.socket.DatagramPacket;
 @PacketID(0x15)
 public class ClientCancelConnectPacket extends InPacket {
 
-	@Override
-	public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
-		for (int i = 0; i < 10; i++) System.out.println(dg.sender().getHostName() + " has cancelled the login.");
-	}
+    @Override
+    public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
+        for (int i = 0; i < 10; i++)
+            System.out.println(dg.sender().getHostName() + " has cancelled the login.");
+    }
 
 }

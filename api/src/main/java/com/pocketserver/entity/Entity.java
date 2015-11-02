@@ -11,8 +11,8 @@ public interface Entity {
 
     void setVelocity(Vector velocity);
 
-	Location getLocation();
+    Location getLocation();
 
-	void teleport(Location location);
-    
+    void teleport(Location location);
+
 }

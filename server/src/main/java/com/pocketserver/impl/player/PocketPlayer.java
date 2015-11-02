@@ -10,48 +10,48 @@ import com.pocketserver.player.Player;
 import io.netty.channel.ChannelHandlerContext;
 
 public class PocketPlayer extends PocketLivingEntity implements Player {
-	
-	private ChannelHandlerContext ctx;
-	private final InetSocketAddress address;
+
+    private ChannelHandlerContext ctx;
+    private final InetSocketAddress address;
     private GameMode gameMode = GameMode.SURVIVAL;
     private String name;
 
     public PocketPlayer(int entityId, InetSocketAddress address) {
-    	super(entityId);
+        super(entityId);
         this.address = address;
     }
 
     @Override
-	public void sendMessage(String message) {
-    	new MessagePacket(message).sendLogin(ctx, address);
+    public void sendMessage(String message) {
+        new MessagePacket(message).sendLogin(ctx, address);
     }
 
     @Override
-	public GameMode getGameMode() {
+    public GameMode getGameMode() {
         return gameMode;
     }
 
     @Override
-	public void setGameMode(GameMode gameMode) {
+    public void setGameMode(GameMode gameMode) {
         this.gameMode = gameMode;
     }
 
     @Override
-	public void chat(String message) {
+    public void chat(String message) {
 
     }
 
     @Override
-	public InetSocketAddress getAddress() {
+    public InetSocketAddress getAddress() {
         return address;
     }
-    
+
     public ChannelHandlerContext getChannelContext() {
-    	return ctx;
+        return ctx;
     }
 
     @Override
-	public String getName() {
+    public String getName() {
         return name;
     }
 
@@ -59,5 +59,5 @@ public class PocketPlayer extends PocketLivingEntity implements Player {
         this.name = name;
         return this;
     }
-    
+
 }

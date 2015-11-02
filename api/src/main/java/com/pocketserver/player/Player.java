@@ -17,5 +17,5 @@ public interface Player extends LivingEntity {
     InetSocketAddress getAddress();
 
     String getName();
-    
+
 }

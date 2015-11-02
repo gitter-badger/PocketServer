@@ -9,12 +9,12 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PluginData {
 
-	String name();
-	
-	String version() default Plugin.DEFAULT_VERSION;
-	
-	String description() default Plugin.DEFAULT_DESCRIPTION;
-	
-	String[] dependency() default {};
-	
+    String name();
+
+    String version() default Plugin.DEFAULT_VERSION;
+
+    String description() default Plugin.DEFAULT_DESCRIPTION;
+
+    String[]dependency() default {};
+
 }

@@ -4,5 +4,4 @@ import com.pocketserver.entity.living.LivingEntity;
 
 public interface Skeleton extends LivingEntity, Hostile {
 
-    
 }

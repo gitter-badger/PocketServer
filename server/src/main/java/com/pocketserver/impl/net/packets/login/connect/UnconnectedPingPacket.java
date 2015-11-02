@@ -16,7 +16,7 @@ public class UnconnectedPingPacket extends InPacket {
         ByteBuf content = dg.content();
         UnconnectedPongPacket packet = new UnconnectedPongPacket(0x1C, content.readLong());
         if (content.readLong() == Packet.MAGIC_1 && content.readLong() == Packet.MAGIC_2)
-        	packet.sendLogin(ctx, dg.sender());
+            packet.sendLogin(ctx, dg.sender());
     }
-    
+
 }

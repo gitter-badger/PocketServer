@@ -8,7 +8,7 @@ public class PlayerPostCommandEvent extends PlayerEvent implements Cancellable {
     private final Command command;
     private boolean cancelled;
 
-    public PlayerPostCommandEvent(Player player,Command command) {
+    public PlayerPostCommandEvent(Player player, Command command) {
         super(player);
         this.command = command;
     }

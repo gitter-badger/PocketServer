@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class EventBus {
-	
+
     private final Map<Class<?>, List<EventData>> eventListeners;
 
     public EventBus() {
@@ -17,8 +17,8 @@ public class EventBus {
     }
 
     public void registerListener(Plugin plugin, Object listener) {
-    	if (listener == null)
-    		return;
+        if (listener == null)
+            return;
         for (Method method : listener.getClass().getMethods()) {
             if (!method.isAnnotationPresent(Listener.class)) {
                 continue;
@@ -29,7 +29,7 @@ public class EventBus {
             }
             Class<?> type = parameters[0];
             List<EventData> dataList = eventListeners.containsKey(type) ? eventListeners.get(type) : new ArrayList<EventData>();
-            EventData data = new EventData(plugin,listener, method);
+            EventData data = new EventData(plugin, listener, method);
             dataList.add(data);
             eventListeners.put(type, dataList);
         }
@@ -60,8 +60,8 @@ public class EventBus {
     }
 
     public <T extends Event> T post(T event) {
-    	if (event == null)
-    		return null;
+        if (event == null)
+            return null;
         for (Entry<Class<?>, List<EventData>> entry : eventListeners.entrySet()) {
             if (!entry.getKey().isInstance(event)) {
                 continue;
@@ -84,10 +84,10 @@ public class EventBus {
             this.object = object;
             this.method = method;
         }
-        
+
         public void invoke(Event event) {
-        	if (!method.isAccessible())
-        		method.setAccessible(true);
+            if (!method.isAccessible())
+                method.setAccessible(true);
             try {
                 method.invoke(object, event);
             } catch (IllegalAccessException | InvocationTargetException e) {

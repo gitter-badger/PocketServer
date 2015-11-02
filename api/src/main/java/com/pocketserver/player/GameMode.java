@@ -1,5 +1,5 @@
 package com.pocketserver.player;
 
-public enum  GameMode {
-    CREATIVE,SURVIVAL;
+public enum GameMode {
+    CREATIVE, SURVIVAL;
 }
