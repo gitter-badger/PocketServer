@@ -3,10 +3,10 @@ package com.pocketserver.impl;
 import java.io.PrintStream;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.slf4j.impl.SimpleLogger;
 
-import com.pocketserver.impl.concurrent.ConsoleThread;
+import com.pocketserver.Server;
+import com.pocketserver.impl.console.ConsoleThread;
 import com.pocketserver.impl.net.netty.PocketServerHandler;
 
 import io.netty.bootstrap.Bootstrap;
@@ -29,8 +29,6 @@ public class PocketServer {
         System.setOut(new PrintStream(System.out, true));
         System.setErr(new PrintStream(System.err, true));
 
-        new ConsoleThread().start();
-
         System.setProperty(SimpleLogger.LOG_FILE_KEY, "System.out");
         System.setProperty(SimpleLogger.LEVEL_IN_BRACKETS_KEY, "true");
         System.setProperty(SimpleLogger.SHOW_THREAD_NAME_KEY, "false");
@@ -39,7 +37,9 @@ public class PocketServer {
         System.setProperty(SimpleLogger.SHOW_SHORT_LOG_NAME_KEY, "true");
         System.setProperty(SimpleLogger.DATE_TIME_FORMAT_KEY, "[yyyy-MM-dd HH:mm:ss]");
 
-        Logger logger = LoggerFactory.getLogger(getClass());
+        new ConsoleThread().start();
+
+        Logger logger = Server.getServer().getLogger();
         EventLoopGroup group = new NioEventLoopGroup();
         try {
             Bootstrap boot = new Bootstrap();

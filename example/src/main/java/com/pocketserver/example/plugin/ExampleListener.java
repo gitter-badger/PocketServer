@@ -18,7 +18,7 @@ public class ExampleListener {
         if (player.getHealth() != 20) { // Check if they do not have full health
             player.setHealth(20); // Set it to full health
         }
-        plg.getLogger().info("Found a chat event: %s %s\n", player.getName(), event.getMessage());
+        plg.getLogger().info("Found a chat event: %s %s", player.getName(), event.getMessage());
     }
 
 }

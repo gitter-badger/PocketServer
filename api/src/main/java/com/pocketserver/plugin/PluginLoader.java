@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Sets;
+import com.pocketserver.Server;
 
 public class PluginLoader {
 
@@ -45,7 +46,7 @@ public class PluginLoader {
         for (File file : files) {
             Set<Plugin> plgs = loadPlugins(file);
             if (plgs.size() > 0) {
-                System.out.format("Found %d plugins in %s: %s\n", plgs.size(), file.getName(), plgs.stream().map(p -> p.getName()).collect(Collectors.toList()));
+                Server.getServer().getLogger().info(String.format("Found %d plugins in %s: %s", plgs.size(), file.getName(), plgs.stream().map(p -> p.getName()).collect(Collectors.toList())));
                 found.addAll(plgs);
             }
         }
@@ -61,7 +62,7 @@ public class PluginLoader {
             }
         });
         duplicates.forEach((s, i) -> {
-            System.err.format("Found %d occurrences of plugin %s. Not loading any.\n", i, s);
+            Server.getServer().getLogger().warn(String.format("Found %d occurrences of plugin %s. Not loading any.", i, s));
             names.remove(s);
             deps.remove(s);
         });
@@ -73,14 +74,14 @@ public class PluginLoader {
                 missingDeps.add(p.getName());
         }
         missingDeps.forEach(p -> {
-            System.err.format("Error loading plugin %s: Dependencies missing: %s\n", p, deps.get(p).toString());
+            Server.getServer().getLogger().warn(String.format("Error loading plugin %s: Dependencies missing: %s", p, deps.get(p).toString()));
             names.remove(p);
             deps.remove(p);
         });
         found.removeIf(p -> missingDeps.contains(p.getName()));
         Set<String> circular = getCircularDependencies(found, deps);
         circular.forEach(p -> {
-            System.err.format("Error loading plugin %s: Circular dependencies detected.\n", p);
+            Server.getServer().getLogger().warn(String.format("Error loading plugin %s: Circular dependencies detected.", p));
             names.remove(p);
             deps.remove(p);
         });
@@ -106,7 +107,7 @@ public class PluginLoader {
             }
         } while (numLoaded > 0);
         found.forEach(p -> {
-            System.err.format("Error loading plugin %s: Dependencies missing: %s\n", p.getName(), deps.get(p.getName()).toString());
+            Server.getServer().getLogger().warn(String.format("Error loading plugin %s: Dependencies missing: %s", p.getName(), deps.get(p.getName()).toString()));
         });
         plugins.forEach(Plugin::onEnable);
         return plugins;
@@ -166,7 +167,7 @@ public class PluginLoader {
             }
             if (highest == 0)
                 if (found.isEmpty())
-                    System.err.format("No classes extending Plugin found in file %s. Not loading.\n", file.getName());
+                    Server.getServer().getLogger().warn(String.format("No classes extending Plugin found in file %s. Not loading.", file.getName()));
                 else {
                     found.forEach(p -> p.file = file);
                     return found;
@@ -179,7 +180,7 @@ public class PluginLoader {
                     version = "Java 9";
                 else
                     version = "an unsupported version of Java";
-                System.err.format("Not loading plugins in file %s because it requires %s.\n", file.getName(), version);
+                Server.getServer().getLogger().warn(String.format("Not loading plugins in file %s because it requires %s.", file.getName(), version));
             }
             cl.close();
         } catch (IOException e) {
