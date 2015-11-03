@@ -2,6 +2,8 @@ package com.pocketserver.plugin;
 
 import java.io.File;
 
+import org.slf4j.Logger;
+
 import com.pocketserver.Server;
 import com.pocketserver.event.EventBus;
 
@@ -11,6 +13,7 @@ public abstract class Plugin {
     public static final String DEFAULT_DESCRIPTION = "";
 
     File file;
+    Logger logger;
 
     public final String getName() {
         Name name = getClass().getAnnotation(Name.class);
@@ -56,6 +59,10 @@ public abstract class Plugin {
         return file;
     }
 
+    public final Logger getLogger() {
+        return logger;
+    }
+
     public final File getDataFolder() {
         return new File("plugins/" + getName() + "/");
     }
@@ -66,6 +73,9 @@ public abstract class Plugin {
 
     public final EventBus getEventBus() {
         return Server.getServer().getEventBus();
+    }
+
+    public void onLoad() {
     }
 
     public void onEnable() {

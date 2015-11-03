@@ -16,8 +16,8 @@ public class ExamplePlugin extends Plugin {
 
     @Override
     public void onEnable() {
-        System.out.println("[Example] Hello, there!");
-        getEventBus().registerListener(this, new ExampleListener());
+        getLogger().info("Hello, there!");
+        getEventBus().registerListener(this, new ExampleListener(this));
 
         new Thread(() -> {
             try {

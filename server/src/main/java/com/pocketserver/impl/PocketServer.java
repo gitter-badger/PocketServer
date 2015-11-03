@@ -4,8 +4,8 @@ import java.io.PrintStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.impl.SimpleLogger;
 
-import com.pocketserver.Server;
 import com.pocketserver.impl.concurrent.ConsoleThread;
 import com.pocketserver.impl.net.netty.PocketServerHandler;
 
@@ -22,8 +22,6 @@ public class PocketServer {
         new PocketServer();
     }
 
-    private final Logger logger;
-
     private PocketServer() {
 
         // Recreate STDOUT and STDERR to have Auto-Flush on, so any newline
@@ -31,9 +29,17 @@ public class PocketServer {
         System.setOut(new PrintStream(System.out, true));
         System.setErr(new PrintStream(System.err, true));
 
-        this.logger = LoggerFactory.getLogger("PocketServer");
-        new ConsoleThread(isRunning()).start();
+        new ConsoleThread().start();
 
+        System.setProperty(SimpleLogger.LOG_FILE_KEY, "System.out");
+        System.setProperty(SimpleLogger.LEVEL_IN_BRACKETS_KEY, "true");
+        System.setProperty(SimpleLogger.SHOW_THREAD_NAME_KEY, "false");
+        System.setProperty(SimpleLogger.SHOW_DATE_TIME_KEY, "true");
+        System.setProperty(SimpleLogger.SHOW_LOG_NAME_KEY, "true");
+        System.setProperty(SimpleLogger.SHOW_SHORT_LOG_NAME_KEY, "true");
+        System.setProperty(SimpleLogger.DATE_TIME_FORMAT_KEY, "[yyyy-MM-dd HH:mm:ss]");
+
+        Logger logger = LoggerFactory.getLogger(getClass());
         EventLoopGroup group = new NioEventLoopGroup();
         try {
             Bootstrap boot = new Bootstrap();
@@ -43,22 +49,16 @@ public class PocketServer {
                 boot.channel(NioDatagramChannel.class);
                 boot.option(ChannelOption.SO_BROADCAST, true);
             }
-
-            Server.getServer(); // Keep this, it's what makes the EventBus and
-                                // PluginLoader do their magic.
             ChannelFuture future = boot.bind(19132).sync();
-            System.out.println("Successfully bound to *:19132");
-            System.out.println("Server is done loading!");
+            logger.info("Successfully bound to *:19132");
+            logger.info("Server is done loading!");
             future.channel().closeFuture().sync();
         } catch (InterruptedException ex) {
             ex.printStackTrace();
         } finally {
-            System.out.println("Goodbye.");
+            logger.info("Goodbye.");
             group.shutdownGracefully();
         }
     }
 
-    public boolean isRunning() {
-        return true;
-    }
 }

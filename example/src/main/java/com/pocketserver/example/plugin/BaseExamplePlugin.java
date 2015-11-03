@@ -8,7 +8,7 @@ public class BaseExamplePlugin extends Plugin {
 
     @Override
     public void onEnable() {
-        System.out.println("[Base] Hello, there!");
+        getLogger().info("Hello, there!");
     }
 
 }

@@ -8,7 +8,7 @@ public class CircularDependencyTestPlugin extends Plugin {
 
     @Override
     public void onEnable() {
-        System.out.println("[Circular] Enabled!");
+        getLogger().info("Enabled!");
     }
 
 }

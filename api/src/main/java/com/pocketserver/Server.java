@@ -1,5 +1,8 @@
 package com.pocketserver;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pocketserver.event.EventBus;
 import com.pocketserver.plugin.PluginLoader;
 
@@ -7,6 +10,7 @@ public class Server {
 
     private static Server server;
 
+    private final Logger logger;
     private final EventBus eventBus;
     private final PluginLoader pluginLoader;
     private boolean running = true;
@@ -20,6 +24,7 @@ public class Server {
     }
 
     private Server() {
+        logger = LoggerFactory.getLogger("PocketServer");
         eventBus = new EventBus();
         pluginLoader = new PluginLoader();
     }
@@ -32,6 +37,10 @@ public class Server {
 
     public boolean isRunning() {
         return running;
+    }
+
+    public Logger getLogger() {
+        return logger;
     }
 
     public EventBus getEventBus() {

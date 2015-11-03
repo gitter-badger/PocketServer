@@ -17,6 +17,8 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
+import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.Sets;
 
 public class PluginLoader {
@@ -64,6 +66,18 @@ public class PluginLoader {
             deps.remove(s);
         });
         found.removeIf(p -> duplicates.containsKey(p.getName()));
+        Set<String> missingDeps = new HashSet<>();
+        for (Plugin p : found) {
+            Set<String> missing = deps.get(p.getName()).stream().filter(d -> !deps.containsKey(d)).collect(Collectors.toSet());
+            if (!missing.isEmpty())
+                missingDeps.add(p.getName());
+        }
+        missingDeps.forEach(p -> {
+            System.err.format("Error loading plugin %s: Dependencies missing: %s\n", p, deps.get(p).toString());
+            names.remove(p);
+            deps.remove(p);
+        });
+        found.removeIf(p -> missingDeps.contains(p.getName()));
         Set<String> circular = getCircularDependencies(found, deps);
         circular.forEach(p -> {
             System.err.format("Error loading plugin %s: Circular dependencies detected.\n", p);
@@ -77,8 +91,9 @@ public class PluginLoader {
             List<Plugin> nodeps = found.stream().filter(p -> deps.get(p.getName()).isEmpty()).collect(Collectors.toList());
             for (Plugin p : nodeps) {
                 try {
+                    p.logger = LoggerFactory.getLogger(p.getName());
                     found.remove(p);
-                    p.onEnable();
+                    p.onLoad();
                     deps.forEach((s, l) -> {
                         l.remove(p.getName());
                         deps.put(s, l);
@@ -93,6 +108,7 @@ public class PluginLoader {
         found.forEach(p -> {
             System.err.format("Error loading plugin %s: Dependencies missing: %s\n", p.getName(), deps.get(p.getName()).toString());
         });
+        plugins.forEach(Plugin::onEnable);
         return plugins;
     }
 
@@ -106,7 +122,7 @@ public class PluginLoader {
             while (!toSearch.isEmpty()) {
                 String pn = toSearch.pop();
                 Plugin plg = names.get(pn);
-                if (plg != null) {
+                if (plg != null && deps.containsKey(pn)) {
                     deps.get(pn).stream().filter(s -> !upstream.contains(s)).forEach(s -> toSearch.add(s));
                     upstream.addAll(deps.get(pn));
                 }
