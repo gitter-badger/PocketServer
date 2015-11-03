@@ -3,13 +3,21 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>PocketServer</artifactId>
+        <artifactId>pocketserver</artifactId>
         <groupId>com.pocketserver</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>${project.version}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>server</artifactId>
+    <artifactId>pocketserver-server</artifactId>
+    
+    <dependencies>
+        <dependency>
+            <artifactId>pocketserver-api</artifactId>
+            <groupId>com.pocketserver</groupId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
