@@ -79,13 +79,13 @@ public abstract class Packet {
     }
 
     public Packet sendLogin(ChannelHandlerContext ctx, InetSocketAddress addr) {
-        System.out.println("Sending login packet " + getClass().getSimpleName());
+        //System.out.println("Sending login packet " + getClass().getSimpleName());
         ctx.writeAndFlush(encode(new DatagramPacket(Unpooled.buffer(), addr)));
         return this;
     }
 
     public Packet sendGame(int customPacketId, EncapsulationStrategy strat, int count, int unk, ChannelHandlerContext ctx, InetSocketAddress address) {
-        System.out.println("Sending game packet " + getClass().getSimpleName());
+        //System.out.println("Sending game packet " + getClass().getSimpleName());
         new CustomPacket(customPacketId, strat, count, unk, this).sendLogin(ctx, address);
         return this;
     }
