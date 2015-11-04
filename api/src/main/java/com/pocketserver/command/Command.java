@@ -19,4 +19,6 @@ public abstract class Command {
 
     public abstract void exec(CommandExecutor executor, String used, String[] args);
 
+    public abstract void help(CommandExecutor executor);
+
 }
