@@ -54,13 +54,16 @@ public class PluginLoader {
         Map<String, Plugin> names = new HashMap<>();
         Map<String, Set<String>> deps = new WeakHashMap<>();
         found.forEach(p -> {
-            if (names.containsKey(p.getName())) {
+            if (p.getName() == null || p.getName().isEmpty()) {
+                Server.getServer().getLogger().warn("Found a plugin with a null or empty plugin name. Skipping.");
+            } else if (names.containsKey(p.getName())) {
                 duplicates.put(p.getName(), duplicates.getOrDefault(p.getName(), 1) + 1);
             } else {
                 names.put(p.getName(), p);
                 deps.put(p.getName(), Sets.newHashSet(p.getDependencies()));
             }
         });
+        found.removeIf(p -> p.getName() == null || p.getName().isEmpty());
         duplicates.forEach((s, i) -> {
             Server.getServer().getLogger().warn(String.format("Found %d occurrences of plugin %s. Not loading any.", i, s));
             names.remove(s);
@@ -161,7 +164,7 @@ public class PluginLoader {
                         } catch (Exception ex) {
                             error.printStackTrace();
                         }
-                    } catch (ClassNotFoundException e) {
+                    } catch (ClassNotFoundException ignored) {
                     }
                 }
             }
