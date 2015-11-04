@@ -1,21 +1,16 @@
 package com.pocketserver.impl.net.packets.login;
 
-import java.util.Date;
-
 import com.pocketserver.impl.net.OutPacket;
 import com.pocketserver.impl.net.PacketID;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.socket.DatagramPacket;
 
 @PacketID(0x10)
 public class ServerHandshakePacket extends OutPacket {
 
-    private final long guid;
     private long timestamp;
 
-    public ServerHandshakePacket(long guid, long timestamp) {
-        this.guid = guid;
+    public ServerHandshakePacket(long timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -32,6 +27,7 @@ public class ServerHandshakePacket extends OutPacket {
 
     @Override
     public DatagramPacket encode(DatagramPacket dg) {
+        /*
         ByteBuf content = dg.content();
         content.writeByte(getPacketID());
         writeDataArray(content);
@@ -40,22 +36,40 @@ public class ServerHandshakePacket extends OutPacket {
         content.writeLong(timestamp); // https://github.com/NiclasOlofsson/MiNET/blob/master/src/MiNET/MiNET/Net/Package.cs
         content.writeLong(new Date().getTime());
         return dg;
+        */
+        ByteBuf content = dg.content();
+        content.writeByte(getPacketID());
+        content.writeInt(0x043f57fe);
+        content.writeByte(0xcd);
+        content.writeShort(19132);
+        writeDataArray(content);
+        content.writeByte(0x00);
+        content.writeByte(0x00);
+        content.writeLong(timestamp);
+        content.writeBytes(new byte[]{0x00, 0x00, 0x00, 0x00, 0x04, 0x44, 0x0b, (byte) 0xa9});
+        return dg;
     }
 
     private void writeDataArray(ByteBuf buf) {
         byte[] unknown1 = new byte[] { (byte) 0x80, (byte) 0xFF, (byte) 0xFF, (byte) 0xFE };
         byte[] unknown2 = new byte[] { (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF };
-        buf.writeByte(unknown1.length);
+
+        this.writeTriad(buf, unknown1.length);
         buf.writeBytes(unknown1);
-        buf.writeByte(0x4A);
-        buf.writeByte(0xBC);
-        buf.writeByte(unknown1.length);
-        buf.writeBytes(unknown1);
-        for (int i = 0; i < 9; i++) {
-            buf.writeByte(0x4A);
-            buf.writeByte(0xBC);
-            buf.writeByte(unknown2.length);
+        for (int i = 0; i < 9; i++)
+        {
+            this.writeTriad(buf,unknown2.length);
             buf.writeBytes(unknown2);
         }
+    }
+
+    public void writeTriad(ByteBuf buf,int i) {
+        byte b1 = (byte)((i >> 16) & 0xFF);
+        byte b2 = (byte)((i >> 8) & 0xFF);
+        byte b3 = (byte)(i & 0xFF);
+
+        buf.writeByte(b1);
+        buf.writeByte(b2);
+        buf.writeByte(b3);
     }
 }

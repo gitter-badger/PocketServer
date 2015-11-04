@@ -28,7 +28,7 @@ public class UnconnectedPongPacket extends OutPacket {
         buf.content().writeLong(TEMP_SERVER_ID);
         writeMagic(buf.content());
         writeString(buf.content(), TEMP_IDENTIFIER);
-        System.out.println(TEMP_IDENTIFIER);
+        //System.out.println(TEMP_IDENTIFIER);
         return buf;
     }
 
