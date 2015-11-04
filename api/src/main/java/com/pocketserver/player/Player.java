@@ -2,9 +2,10 @@ package com.pocketserver.player;
 
 import java.net.InetSocketAddress;
 
+import com.pocketserver.command.CommandExecutor;
 import com.pocketserver.entity.living.LivingEntity;
 
-public interface Player extends LivingEntity {
+public interface Player extends LivingEntity, CommandExecutor {
 
     void sendMessage(String message);
 
@@ -15,7 +16,5 @@ public interface Player extends LivingEntity {
     void setGameMode(GameMode mode);
 
     InetSocketAddress getAddress();
-
-    String getName();
 
 }

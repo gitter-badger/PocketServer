@@ -1,6 +1,8 @@
 package com.pocketserver.command;
 
-public interface CommandExecutor {
+import com.pocketserver.Permissible;
+
+public interface CommandExecutor extends Permissible {
 
     String getName();
 
