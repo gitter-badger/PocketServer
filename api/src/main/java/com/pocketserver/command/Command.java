@@ -1,13 +1,22 @@
 package com.pocketserver.command;
 
-public interface Command {
+import java.util.Arrays;
 
-    String getName();
+public abstract class Command {
 
-    String[] getAliases();
+    private final String[] aliases;
 
-    String getHelpText(CommandExecutor executor);
+    public Command(String name, String... aliases) {
+        this.aliases = new String[aliases.length + 1];
+        this.aliases[0] = name;
+        for (int i = 0; i < aliases.length; i++)
+            this.aliases[i + 1] = aliases[i];
+    }
 
-    void exec(CommandExecutor executor, String used, String[] args);
+    public final String[] getAliases() {
+        return Arrays.copyOf(aliases, aliases.length);
+    }
+
+    abstract void exec(CommandExecutor executor, String used, String[] args);
 
 }
