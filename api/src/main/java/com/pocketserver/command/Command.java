@@ -17,6 +17,6 @@ public abstract class Command {
         return Arrays.copyOf(aliases, aliases.length);
     }
 
-    abstract void exec(CommandExecutor executor, String used, String[] args);
+    public abstract void exec(CommandExecutor executor, String used, String[] args);
 
 }
