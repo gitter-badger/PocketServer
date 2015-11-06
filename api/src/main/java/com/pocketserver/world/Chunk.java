@@ -14,4 +14,7 @@ public interface Chunk {
 
     Block getBlock(int dx, int dy, int dz);
 
+    boolean isInChunk(Location location);
+
+    boolean isInChunk(int x,int y, int z);
 }

@@ -1,4 +1,4 @@
 package com.pocketserver.entity.vehicle;
 
-public class Minecart extends Vehicle {
+public interface Minecart extends Vehicle {
 }

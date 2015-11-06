@@ -30,7 +30,6 @@ public class PocketChunk implements Chunk {
                 }
             }
         }
-
     }
 
     public PocketChunk(Location loc) {
@@ -69,6 +68,17 @@ public class PocketChunk implements Chunk {
         if (0 <= x && x < 16 && 0 <= y && y < 256 && 0 <= z && z < 16)
             return blocks[getBlockIndex(x, y, z)];
         return null;
+    }
+
+    @Override
+    public boolean isInChunk(Location location) {
+        int dx = location.getBlockX(), dz = location.getBlockZ();
+        return  ((dx << 4) == x && (dz << 4) == z);
+    }
+
+    @Override
+    public boolean isInChunk(int x, int y, int z) {
+        return isInChunk(new Location(world,x,y,z));
     }
 
 }

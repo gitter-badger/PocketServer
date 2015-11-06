@@ -4,16 +4,23 @@ import com.pocketserver.plugin.Plugin;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 public class EventBus {
-
     private final Map<Class<?>, List<EventData>> eventListeners;
+    private final ExecutorService service;
 
     public EventBus() {
         this.eventListeners = new ConcurrentHashMap<>();
+        this.service = new ScheduledThreadPoolExecutor(10); //TODO: Make this configurable
     }
 
     public void registerListener(Plugin plugin, Object listener) {
@@ -59,18 +66,20 @@ public class EventBus {
         }
     }
 
-    public <T extends Event> T post(T event) {
+    public <T extends Event> Future<T> post(T event) {
         if (event == null)
             return null;
-        for (Entry<Class<?>, List<EventData>> entry : eventListeners.entrySet()) {
-            if (!entry.getKey().isInstance(event)) {
-                continue;
+        return service.submit(() -> {
+            for (Entry<Class<?>, List<EventData>> entry : eventListeners.entrySet()) {
+                if (!entry.getKey().isInstance(event)) {
+                    continue;
+                }
+                for (EventData eventData : entry.getValue()) {
+                    eventData.invoke(event);
+                }
             }
-            for (EventData eventData : entry.getValue()) {
-                eventData.invoke(event);
-            }
-        }
-        return event;
+            return event;
+        });
     }
 
     private class EventData {

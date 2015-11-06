@@ -81,4 +81,8 @@ public class Location implements Cloneable, Serializable {
     public Vector toVector() {
         return new Vector(x, y, z);
     }
+
+    public Chunk getChunk() {
+        return this.world.getChunk((int)x,(int)z,true);
+    }
 }

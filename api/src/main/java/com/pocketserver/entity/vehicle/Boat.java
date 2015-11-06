@@ -1,5 +1,5 @@
 package com.pocketserver.entity.vehicle;
 
-public class Boat extends Vehicle {
+public interface Boat extends Vehicle {
 
 }

@@ -7,9 +7,9 @@ import com.pocketserver.world.Location;
 
 public class PocketBlock implements Block {
 
+    private final Location location;
     private Material material;
     private byte data;
-    private Location location;
 
     public PocketBlock(Material material, byte data, Location location) {
         this.material = material;
@@ -39,8 +39,7 @@ public class PocketBlock implements Block {
 
     @Override
     public Chunk getChunk() {
-        Location loc = getLocation();
-        return loc.getWorld().getChunk(loc.getBlockX() << 4, loc.getBlockZ() << 4);
+        return getLocation().getChunk();
     }
 
 }
