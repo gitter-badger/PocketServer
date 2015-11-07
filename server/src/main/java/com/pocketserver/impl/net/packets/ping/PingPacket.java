@@ -2,7 +2,7 @@ package com.pocketserver.impl.net.packets.ping;
 
 import com.pocketserver.impl.net.InPacket;
 import com.pocketserver.impl.net.PacketID;
-import com.pocketserver.impl.net.packets.udp.CustomPacket.EncapsulationStrategy;
+import com.pocketserver.impl.net.packets.oldudp.CustomPacketOld.EncapsulationStrategy;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;

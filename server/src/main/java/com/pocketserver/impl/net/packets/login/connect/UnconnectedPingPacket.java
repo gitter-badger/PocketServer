@@ -4,6 +4,7 @@ import com.pocketserver.impl.net.InPacket;
 import com.pocketserver.impl.net.Packet;
 import com.pocketserver.impl.net.PacketID;
 
+import com.pocketserver.impl.net.Protocol;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
@@ -15,7 +16,7 @@ public class UnconnectedPingPacket extends InPacket {
     public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
         ByteBuf content = dg.content();
         UnconnectedPongPacket packet = new UnconnectedPongPacket(0x1C, content.readLong());
-        if (content.readLong() == Packet.MAGIC_1 && content.readLong() == Packet.MAGIC_2)
+        if (content.readLong() == Protocol.MAGIC_1 && content.readLong() == Protocol.MAGIC_2)
             packet.sendLogin(ctx, dg.sender());
     }
 

@@ -12,13 +12,14 @@ import com.pocketserver.impl.net.packets.login.connect.OpenConnectionRequestBPac
 import com.pocketserver.impl.net.packets.login.connect.UnconnectedPingPacket;
 import com.pocketserver.impl.net.packets.message.ChatPacket;
 import com.pocketserver.impl.net.packets.ping.PingPacket;
-import com.pocketserver.impl.net.packets.udp.AcknowledgedPacket;
+import com.pocketserver.impl.net.packets.udp.ACKPacket;
 import com.pocketserver.impl.net.packets.udp.CustomPacket;
-import com.pocketserver.impl.net.packets.udp.NotAcknowledgedPacket;
+import com.pocketserver.impl.net.packets.udp.NACKPacket;
 
 public class PacketManager {
 
     private static final PacketManager INSTANCE = new PacketManager();
+    private Map<Object, Object> packets;
 
     public static PacketManager getInstance() {
         return INSTANCE;
@@ -35,8 +36,8 @@ public class PacketManager {
         registerLoginPacket(OpenConnectionRequestAPacket.class);
         registerLoginPacket(OpenConnectionRequestBPacket.class);
         registerLoginPacket(CustomPacket.class);
-        registerLoginPacket(AcknowledgedPacket.class);
-        registerLoginPacket(NotAcknowledgedPacket.class);
+        registerLoginPacket(ACKPacket.class);
+        registerLoginPacket(NACKPacket.class);
 
         registerGamePacket(PingPacket.class);
         registerGamePacket(ChatPacket.class);
@@ -125,4 +126,7 @@ public class PacketManager {
         return sentPackets.get(id);
     }
 
+    public Map<Byte, Class<? extends Packet>> getPackets() {
+        return gamePacketIds;
+    }
 }

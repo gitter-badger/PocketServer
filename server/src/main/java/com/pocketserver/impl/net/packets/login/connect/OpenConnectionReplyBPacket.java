@@ -3,6 +3,7 @@ package com.pocketserver.impl.net.packets.login.connect;
 import com.pocketserver.impl.net.OutPacket;
 import com.pocketserver.impl.net.PacketID;
 
+import com.pocketserver.impl.net.Protocol;
 import io.netty.channel.socket.DatagramPacket;
 
 @PacketID(0x08)
@@ -21,7 +22,7 @@ public class OpenConnectionReplyBPacket extends OutPacket {
         System.out.println(this.getPacketID());
         System.out.println(0x08);
         writeMagic(dg.content());
-        dg.content().writeLong(TEMP_SERVER_ID);
+        dg.content().writeLong(Protocol.TEMP_SERVER_ID);
         dg.content().writeShort(clientPort);
         dg.content().writeShort(mtu);
         dg.content().writeByte(0);

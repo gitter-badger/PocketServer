@@ -1,9 +1,9 @@
 package com.pocketserver.impl.net.packets.login.connect;
 
 import com.pocketserver.impl.net.InPacket;
-import com.pocketserver.impl.net.Packet;
 import com.pocketserver.impl.net.PacketID;
 
+import com.pocketserver.impl.net.Protocol;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
@@ -19,7 +19,7 @@ public class OpenConnectionRequestAPacket extends InPacket {
         ByteBuf buf = dg.content();
         long magic1 = buf.readLong();
         long magic2 = buf.readLong();
-        if (magic1 == Packet.MAGIC_1 && magic2 == Packet.MAGIC_2) {
+        if (magic1 == Protocol.MAGIC_1 && magic2 == Protocol.MAGIC_2) {
             proto = buf.readByte();
             mtu = buf.readableBytes();
             System.out.println("Proto = " + proto + ", MTU = " + mtu);

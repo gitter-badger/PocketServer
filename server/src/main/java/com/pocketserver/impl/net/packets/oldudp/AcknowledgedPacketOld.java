@@ -1,34 +1,34 @@
-package com.pocketserver.impl.net.packets.udp;
+package com.pocketserver.impl.net.packets.oldudp;
+
+import java.net.InetSocketAddress;
 
 import com.pocketserver.impl.net.Packet;
 import com.pocketserver.impl.net.PacketID;
-import com.pocketserver.impl.net.PacketManager;
 
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
 
-@PacketID(0xA0)
-public class NotAcknowledgedPacket extends Packet {
+@PacketID(0xC0)
+public class AcknowledgedPacketOld extends Packet {
 
     private int unknown, pkt_id1, pkt_id2;
     private boolean single;
 
-    public NotAcknowledgedPacket() {
+    public AcknowledgedPacketOld() {
     } // no-args for decoding
 
-    private NotAcknowledgedPacket(int unknown, int pkt_id1, int pkt_id2, boolean single) {
+    private AcknowledgedPacketOld(int unknown, int pkt_id1, int pkt_id2, boolean single) {
         this.pkt_id1 = pkt_id1;
         this.pkt_id2 = pkt_id2;
         this.single = single;
     }
 
-    public static NotAcknowledgedPacket one(int unknown, int pkt_id1) {
-        return new NotAcknowledgedPacket(unknown, pkt_id1, -1, true);
+    public static AcknowledgedPacketOld one(int unknown, int pkt_id1) {
+        return new AcknowledgedPacketOld(unknown, pkt_id1, -1, true);
     }
 
-    public static NotAcknowledgedPacket two(int unknown, int pkt_id1, int pkt_id2) {
-        return new NotAcknowledgedPacket(unknown, pkt_id1, pkt_id2, false);
+    public static AcknowledgedPacketOld two(int unknown, int pkt_id1, int pkt_id2) {
+        return new AcknowledgedPacketOld(unknown, pkt_id1, pkt_id2, false);
     }
 
     @Override
@@ -37,12 +37,6 @@ public class NotAcknowledgedPacket extends Packet {
         single = dg.content().readBoolean();
         pkt_id1 = dg.content().readMedium();
         pkt_id2 = single ? -1 : dg.content().readMedium();
-        Packet pkt1 = PacketManager.getInstance().getSavedPacket(pkt_id1);
-        Packet pkt2 = PacketManager.getInstance().getSavedPacket(pkt_id2);
-        if (pkt1 != null)
-            ctx.writeAndFlush(pkt1.encode(new DatagramPacket(Unpooled.buffer(), dg.sender())));
-        if (pkt2 != null)
-            ctx.writeAndFlush(pkt2.encode(new DatagramPacket(Unpooled.buffer(), dg.sender())));
     }
 
     @Override
@@ -54,6 +48,13 @@ public class NotAcknowledgedPacket extends Packet {
         if (!single)
             dg.content().writeMedium(pkt_id2);
         return dg;
+    }
+
+    @Override
+    public Packet sendLogin(ChannelHandlerContext ctx, InetSocketAddress addr) {
+        super.sendLogin(ctx, addr);
+        System.out.format("ACK send: unknown = %d, pkt_id1 = %d, pkt_id2 = %d\n", unknown, pkt_id1, pkt_id2);
+        return this;
     }
 
 }

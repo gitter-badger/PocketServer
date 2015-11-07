@@ -2,7 +2,11 @@ package com.pocketserver;
 
 public class Permission {
     private final String permission;
-    private boolean allowed = true;
+    private boolean allowed;
+
+    public Permission(String permission) {
+        this(permission,true);
+    }
 
     public Permission(String permission, boolean allowed) {
         this.permission = permission;

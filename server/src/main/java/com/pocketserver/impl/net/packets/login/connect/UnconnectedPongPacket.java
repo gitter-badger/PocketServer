@@ -3,6 +3,8 @@ package com.pocketserver.impl.net.packets.login.connect;
 import com.pocketserver.impl.net.OutPacket;
 import com.pocketserver.impl.net.PacketID;
 
+import com.pocketserver.impl.net.Protocol;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.socket.DatagramPacket;
 
 @PacketID({ 0x1C, 0x1D })
@@ -23,12 +25,12 @@ public class UnconnectedPongPacket extends OutPacket {
 
     @Override
     public DatagramPacket encode(DatagramPacket buf) {
-        buf.content().writeByte(packetId);
-        buf.content().writeLong(id);
-        buf.content().writeLong(TEMP_SERVER_ID);
-        writeMagic(buf.content());
-        writeString(buf.content(), TEMP_IDENTIFIER);
-        //System.out.println(TEMP_IDENTIFIER);
+        ByteBuf content = buf.content();
+        content.writeByte(packetId);
+        content.writeLong(id);
+        content.writeLong(Protocol.TEMP_SERVER_ID);
+        writeMagic(content);
+        writeString(content, Protocol.TEMP_IDENTIFIER);
         return buf;
     }
 

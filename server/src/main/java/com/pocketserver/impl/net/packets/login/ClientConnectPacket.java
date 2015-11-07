@@ -2,7 +2,6 @@ package com.pocketserver.impl.net.packets.login;
 
 import com.pocketserver.impl.net.InPacket;
 import com.pocketserver.impl.net.PacketID;
-import com.pocketserver.impl.net.packets.udp.CustomPacket.EncapsulationStrategy;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
@@ -21,6 +20,7 @@ public class ClientConnectPacket extends InPacket {
         unknown = dg.content().readByte();
 
         ctx.writeAndFlush(new ServerHandshakePacket(session));
+        System.out.println("And fluuussshiiingggg");
         //.sendGame(0x84, EncapsulationStrategy.COUNT, 0x02F001, 0, ctx, dg.sender());
     }
 

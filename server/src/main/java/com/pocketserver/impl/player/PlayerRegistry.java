@@ -1,4 +1,4 @@
-package com.pocketserver.player;
+package com.pocketserver.impl.player;
 
 import java.net.InetSocketAddress;
 import java.util.Map;
@@ -7,26 +7,26 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PlayerRegistry {
 
     private static final PlayerRegistry INSTANCE = new PlayerRegistry();
-    private final Map<InetSocketAddress, Player> playerMap = new ConcurrentHashMap<>();
+    private final Map<InetSocketAddress, PocketPlayer> playerMap = new ConcurrentHashMap<>();
 
     public static PlayerRegistry get() {
         return INSTANCE;
     }
 
-    public void registerPlayer(Player player) {
+    public void registerPlayer(PocketPlayer player) {
         this.playerMap.put(player.getAddress(), player);
     }
 
-    public void unregisterPlayer(Player player) {
+    public void unregisterPlayer(PocketPlayer player) {
         this.playerMap.remove(player.getAddress());
     }
 
-    public Player getPlayer(InetSocketAddress address) {
+    public PocketPlayer getPlayer(InetSocketAddress address) {
         return playerMap.get(address);
     }
 
-    public Player getPlayer(String name) {
-        for (Player p : playerMap.values())
+    public PocketPlayer getPlayer(String name) {
+        for (PocketPlayer p : playerMap.values())
             if (p.getName().equalsIgnoreCase(name))
                 return p;
         return null;

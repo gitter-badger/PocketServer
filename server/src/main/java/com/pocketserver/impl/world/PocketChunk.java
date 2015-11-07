@@ -80,5 +80,4 @@ public class PocketChunk implements Chunk {
     public boolean isInChunk(int x, int y, int z) {
         return isInChunk(new Location(world,x,y,z));
     }
-
 }
