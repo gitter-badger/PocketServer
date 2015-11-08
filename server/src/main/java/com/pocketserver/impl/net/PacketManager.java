@@ -3,6 +3,8 @@ package com.pocketserver.impl.net;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.base.Preconditions;
+import com.pocketserver.impl.exception.InvalidPacketException;
 import com.pocketserver.impl.net.packets.login.ClientCancelConnectPacket;
 import com.pocketserver.impl.net.packets.login.ClientConnectPacket;
 import com.pocketserver.impl.net.packets.login.ClientHandshakePacket;
@@ -19,12 +21,61 @@ import com.pocketserver.impl.net.packets.udp.NACKPacket;
 public class PacketManager {
 
     private static final PacketManager INSTANCE = new PacketManager();
-    private Map<Object, Object> packets;
-
     public static PacketManager getInstance() {
         return INSTANCE;
     }
 
+    private final Map<Byte, Class<? extends Packet>> packetIds = new HashMap<>();
+
+    {
+        registerPacket(UnconnectedPingPacket.class);
+        registerPacket(OpenConnectionRequestAPacket.class);
+        registerPacket(OpenConnectionRequestBPacket.class);
+        registerPacket(CustomPacket.class);
+        registerPacket(ACKPacket.class);
+        registerPacket(NACKPacket.class);
+
+        registerPacket(PingPacket.class);
+        registerPacket(ChatPacket.class);
+        registerPacket(ClientConnectPacket.class);
+        registerPacket(ClientHandshakePacket.class);
+        registerPacket(ClientCancelConnectPacket.class);
+        registerPacket(LoginInfoPacket.class);
+    }
+
+    public void registerPacket(Class<? extends Packet> packet) {
+        Preconditions.checkNotNull(packet);
+        PacketID id = packet.getDeclaredAnnotation(PacketID.class);
+        if (id == null) {
+            throw new InvalidPacketException("All packets must be annotated with @PacketID.",packet);
+        }
+        for (int i : id.value()) {
+            System.out.println(i);
+            Preconditions.checkNotNull(packetIds);
+            packetIds.put((byte) i,packet);
+        }
+    }
+
+    public Class<? extends Packet> getPacketById(byte id) {
+        return packetIds.get(id);
+    }
+
+    public Packet initializePacketById(byte id) {
+        return initializePacket(getPacketById(id));
+    }
+
+    public Packet initializePacket(Class<? extends Packet> clazz) {
+        try {
+            return clazz.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /*
+
+    private Map<Object, Object> packets;
     private final Map<Byte, Class<? extends Packet>> loginPacketIds = new HashMap<>();
     private final Map<Byte, Class<? extends Packet>> gamePacketIds = new HashMap<>();
 
@@ -129,4 +180,5 @@ public class PacketManager {
     public Map<Byte, Class<? extends Packet>> getPackets() {
         return gamePacketIds;
     }
+    */
 }

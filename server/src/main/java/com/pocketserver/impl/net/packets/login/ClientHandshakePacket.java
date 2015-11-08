@@ -17,7 +17,7 @@ public class ClientHandshakePacket extends InPacket {
     long session, session2;
 
     @Override
-    public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
+    public void decode(DatagramPacket dg, ChannelHandlerContext ctx) {
         if (dg.content().readInt() != COOKIE && dg.content().readByte() != SECURITY)
             return;
         port = dg.content().readShort();

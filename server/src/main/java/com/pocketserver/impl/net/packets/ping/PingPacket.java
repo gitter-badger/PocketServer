@@ -13,7 +13,7 @@ public class PingPacket extends InPacket {
     long identifier;
 
     @Override
-    public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
+    public void decode(DatagramPacket dg, ChannelHandlerContext ctx) {
         identifier = dg.content().readLong();
         new PongPacket(identifier).sendGame(0x84, EncapsulationStrategy.BARE, 0, 0, ctx, dg.sender());
     }

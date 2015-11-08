@@ -17,10 +17,10 @@ public class PocketServerHandler extends SimpleChannelInboundHandler<DatagramPac
         byte id = buf.readByte();
         String sid = String.format("%X", id);
         System.out.format("PacketID received: 0x%s\n", sid.length() == 1 ? "0" + sid : sid);
-        Packet packet = PacketManager.getInstance().createLoginPacket(id);
+        Packet packet = PacketManager.getInstance().initializePacketById(id);
         if (packet != null) { // if null, then there's no packet with that id!
           //  System.out.println("Received " + packet.getClass().getSimpleName());
-            packet.decode(ctx, msg);
+            packet.decode(msg, ctx);
         }
     }
 

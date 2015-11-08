@@ -19,7 +19,7 @@ public class MessagePacket extends Packet {
     } // no-args for decoding
 
     @Override
-    public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
+    public void decode(DatagramPacket dg, ChannelHandlerContext ctx) {
         message = readString(dg.content());
     }
 

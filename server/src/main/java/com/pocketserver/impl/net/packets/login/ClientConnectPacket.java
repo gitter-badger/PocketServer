@@ -13,7 +13,7 @@ public class ClientConnectPacket extends InPacket {
     byte unknown;
 
     @Override
-    public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
+    public void decode(DatagramPacket dg, ChannelHandlerContext ctx) {
        // System.out.println("0x09 is a decode packet.");
         clientId = dg.content().readLong();
         session = dg.content().readLong();

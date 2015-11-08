@@ -11,7 +11,7 @@ public class ChatPacket extends InPacket {
     String message;
 
     @Override
-    public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
+    public void decode(DatagramPacket dg, ChannelHandlerContext ctx) {
         message = readString(dg.content());
         /*
          * Player player = PlayerRegistry.get().getPlayer(dg.sender()); if

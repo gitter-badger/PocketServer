@@ -32,7 +32,7 @@ public class AcknowledgedPacketOld extends Packet {
     }
 
     @Override
-    public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
+    public void decode(DatagramPacket dg, ChannelHandlerContext ctx) {
         unknown = dg.content().readShort();
         single = dg.content().readBoolean();
         pkt_id1 = dg.content().readMedium();
@@ -51,8 +51,8 @@ public class AcknowledgedPacketOld extends Packet {
     }
 
     @Override
-    public Packet sendLogin(ChannelHandlerContext ctx, InetSocketAddress addr) {
-        super.sendLogin(ctx, addr);
+    public Packet sentPacket(ChannelHandlerContext ctx, InetSocketAddress addr) {
+        super.sentPacket(ctx, addr);
         System.out.format("ACK send: unknown = %d, pkt_id1 = %d, pkt_id2 = %d\n", unknown, pkt_id1, pkt_id2);
         return this;
     }

@@ -8,7 +8,7 @@ import io.netty.channel.socket.DatagramPacket;
 @PacketID(0xA0)
 public class NACKPacket extends Packet {
     @Override
-    public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
+    public void decode(DatagramPacket dg, ChannelHandlerContext ctx) {
         System.out.println("The client lost the packet: " + dg.content().readByte());
     }
 

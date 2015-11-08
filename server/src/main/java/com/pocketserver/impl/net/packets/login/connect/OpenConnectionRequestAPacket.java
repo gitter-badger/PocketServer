@@ -15,7 +15,7 @@ public class OpenConnectionRequestAPacket extends InPacket {
     private int mtu;
 
     @Override
-    public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
+    public void decode(DatagramPacket dg, ChannelHandlerContext ctx) {
         ByteBuf buf = dg.content();
         long magic1 = buf.readLong();
         long magic2 = buf.readLong();
@@ -25,9 +25,9 @@ public class OpenConnectionRequestAPacket extends InPacket {
             System.out.println("Proto = " + proto + ", MTU = " + mtu);
             if (proto == Protocol.RAKNET_VERSION) {
                 System.out.println("Sent?");
-                new OpenConnectionReplyAPacket(mtu).sendLogin(ctx, dg.sender());
+                new OpenConnectionReplyAPacket(mtu).sentPacket(ctx, dg.sender());
             } else {
-                new IncompatibleProtocolPacket().sendLogin(ctx, dg.sender());
+                new IncompatibleProtocolPacket().sentPacket(ctx, dg.sender());
             }
         }
     }

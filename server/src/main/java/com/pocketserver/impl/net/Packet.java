@@ -43,17 +43,23 @@ public abstract class Packet {
         return new String(bytes, Charset.defaultCharset());
     }
 
-    public Packet sendLogin(ChannelHandlerContext ctx, InetSocketAddress address) {
+    public Packet sentPacket(ChannelHandlerContext ctx, InetSocketAddress address) {
         ctx.writeAndFlush(encode(new DatagramPacket(Unpooled.buffer(), address)));
         return this;
     }
 
+    @Deprecated
     public Packet sendGame(int customPacketId, EncapsulationStrategy strategy, int count, int unk, ChannelHandlerContext ctx, InetSocketAddress address) {
-        new CustomPacketOld(customPacketId, strategy, count, unk, this).sendLogin(ctx, address);
+        new CustomPacketOld(customPacketId, strategy, count, unk, this).sentPacket(ctx, address);
         return this;
     }
 
-    public abstract void decode(ChannelHandlerContext ctx, DatagramPacket dg);
+    public abstract void decode(DatagramPacket dg, ChannelHandlerContext ctx);
 
     public abstract DatagramPacket encode(DatagramPacket dg);
+
+    @Override
+    public String toString() {
+        return this.getPacketID() + " " + this.getClass().getName();
+    }
 }

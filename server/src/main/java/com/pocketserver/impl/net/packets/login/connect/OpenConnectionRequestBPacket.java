@@ -17,7 +17,7 @@ public class OpenConnectionRequestBPacket extends InPacket {
     long clientId;
 
     @Override
-    public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
+    public void decode(DatagramPacket dg, ChannelHandlerContext ctx) {
         ByteBuf buf = dg.content();
         if (buf.readLong() == Protocol.MAGIC_1 && buf.readLong() == Protocol.MAGIC_2) {
             sec = buf.readByte();
@@ -26,7 +26,7 @@ public class OpenConnectionRequestBPacket extends InPacket {
             mtu = buf.readShort();
             clientId = buf.readLong();
 
-            new OpenConnectionReplyBPacket(mtu, dg.sender().getPort()).sendLogin(ctx, dg.sender());
+            new OpenConnectionReplyBPacket(mtu, dg.sender().getPort()).sentPacket(ctx, dg.sender());
         }
     }
 

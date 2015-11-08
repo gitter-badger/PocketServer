@@ -22,7 +22,7 @@ public class ExamplePlugin extends Plugin {
         new Thread(() -> {
             try {
                 Thread.sleep(500);
-            } catch (Exception ex) {
+            } catch (Exception ignored) {
             }
             getEventBus().post(new PlayerChatEvent(new PocketPlayer(0, null).setName("PlayerName"), "ChatMessage"));
         }).start();

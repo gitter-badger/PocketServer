@@ -24,7 +24,7 @@ public class ACKPacket extends Packet {
     }
 
     @Override
-    public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
+    public void decode(DatagramPacket dg, ChannelHandlerContext ctx) {
         ByteBuf content = dg.content();
         unknown = content.readShort();
         additionalPacket = content.readBoolean();

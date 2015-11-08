@@ -32,18 +32,18 @@ public class NotAcknowledgedPacketOld extends Packet {
     }
 
     @Override
-    public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
+    public void decode(DatagramPacket dg, ChannelHandlerContext ctx) {
         unknown = dg.content().readShort();
         single = dg.content().readBoolean();
         pkt_id1 = dg.content().readMedium();
         pkt_id2 = single ? -1 : dg.content().readMedium();
-        Packet pkt1 = PacketManager.getInstance().getSavedPacket(pkt_id1);
+       /* Packet pkt1 = PacketManager.getInstance().getSavedPacket(pkt_id1);
         Packet pkt2 = PacketManager.getInstance().getSavedPacket(pkt_id2);
         if (pkt1 != null)
             ctx.writeAndFlush(pkt1.encode(new DatagramPacket(Unpooled.buffer(), dg.sender())));
         if (pkt2 != null)
             ctx.writeAndFlush(pkt2.encode(new DatagramPacket(Unpooled.buffer(), dg.sender())));
-    }
+    */}
 
     @Override
     public DatagramPacket encode(DatagramPacket dg) {

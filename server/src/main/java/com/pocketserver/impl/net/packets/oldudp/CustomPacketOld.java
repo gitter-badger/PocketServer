@@ -63,7 +63,7 @@ public class CustomPacketOld extends Packet {
     } // no-args for decoding
 
     @Override
-    public void decode(ChannelHandlerContext ctx, DatagramPacket dg) {
+    public void decode(DatagramPacket dg, ChannelHandlerContext ctx) {
         /*
          * while (dg.content().readableBytes() > 0) { String s =
          * Integer.toHexString(dg.content().readByte()).toUpperCase(); if
@@ -84,21 +84,21 @@ public class CustomPacketOld extends Packet {
             byte[] packet_data = new byte[packet_bytes + 1];
             packet_data[0] = packet_id;
             dg.content().readBytes(packet_data, 1, packet_bytes - 1);
-            packet = PacketManager.getInstance().createGamePacket(packet_id);
+            //packet = PacketManager.getInstance().createGamePacket(packet_id);
             System.out.format("Received game packet ID 0x%s", packet_id < 10 ? "0" + String.format("%X", packet_id) : String.format("%X", packet_id));
             if (packet != null) {
                 System.out.format(", type = %s\n", packet.getClass().getSimpleName());
-                packet.decode(ctx, new DatagramPacket(Unpooled.copiedBuffer(packet_data).readerIndex(1), dg.recipient(), dg.sender()));
+                packet.decode(new DatagramPacket(Unpooled.copiedBuffer(packet_data).readerIndex(1), dg.recipient(), dg.sender()), ctx);
             } else {
                 System.out.println();
             }
-            AcknowledgedPacketOld.one(1, num).sendLogin(ctx, dg.sender());
+            AcknowledgedPacketOld.one(1, num).sentPacket(ctx, dg.sender());
         }
     }
 
     @Override
     public DatagramPacket encode(DatagramPacket dg) {
-        PacketManager.getInstance().save(packet);
+        //PacketManager.getInstance().save(packet);
         dg.content().writeByte(packetId);
         // dg.content().writeMedium(PacketManager.getInstance().getSentAmount());
         dg.content().writeMedium(0);
