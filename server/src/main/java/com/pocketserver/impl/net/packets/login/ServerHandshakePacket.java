@@ -1,9 +1,15 @@
 package com.pocketserver.impl.net.packets.login;
 
 import com.pocketserver.impl.net.OutPacket;
+import com.pocketserver.impl.net.Packet;
 import com.pocketserver.impl.net.PacketID;
+import com.pocketserver.impl.net.packets.udp.CustomPacket;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
+
+import java.net.InetSocketAddress;
 
 @PacketID(0x10)
 public class ServerHandshakePacket extends OutPacket {
@@ -20,7 +26,7 @@ public class ServerHandshakePacket extends OutPacket {
     @Override
     public DatagramPacket encode(DatagramPacket dg) {
         ByteBuf content = dg.content();
-        content.writeByte(getPacketID());
+        content.writeByte((byte)0x10);
         content.writeInt(0x043f57fe);
         content.writeByte(0xcd);
         content.writeShort(19132);
@@ -50,5 +56,13 @@ public class ServerHandshakePacket extends OutPacket {
         buf.writeByte(b1);
         buf.writeByte(b2);
         buf.writeByte(b3);
+    }
+
+    @Override
+    public Packet sentPacket(ChannelHandlerContext ctx, InetSocketAddress address) {
+        DatagramPacket encode = encode(new DatagramPacket(Unpooled.buffer(), address));
+
+        CustomPacket.EncapsulationStrategy.BARE.decode(ctx,encode,94);
+        return this;
     }
 }

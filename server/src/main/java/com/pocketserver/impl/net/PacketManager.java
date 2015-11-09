@@ -5,14 +5,13 @@ import java.util.Map;
 
 import com.google.common.base.Preconditions;
 import com.pocketserver.impl.exception.InvalidPacketException;
-import com.pocketserver.impl.net.packets.login.ClientCancelConnectPacket;
-import com.pocketserver.impl.net.packets.login.ClientConnectPacket;
-import com.pocketserver.impl.net.packets.login.ClientHandshakePacket;
-import com.pocketserver.impl.net.packets.login.LoginInfoPacket;
+import com.pocketserver.impl.net.packets.login.*;
 import com.pocketserver.impl.net.packets.login.connect.OpenConnectionRequestAPacket;
 import com.pocketserver.impl.net.packets.login.connect.OpenConnectionRequestBPacket;
 import com.pocketserver.impl.net.packets.login.connect.UnconnectedPingPacket;
 import com.pocketserver.impl.net.packets.message.ChatPacket;
+import com.pocketserver.impl.net.packets.oldudp.AcknowledgedPacketOld;
+import com.pocketserver.impl.net.packets.oldudp.NotAcknowledgedPacketOld;
 import com.pocketserver.impl.net.packets.ping.PingPacket;
 import com.pocketserver.impl.net.packets.udp.ACKPacket;
 import com.pocketserver.impl.net.packets.udp.CustomPacket;
@@ -32,8 +31,8 @@ public class PacketManager {
         registerPacket(OpenConnectionRequestAPacket.class);
         registerPacket(OpenConnectionRequestBPacket.class);
         registerPacket(CustomPacket.class);
-        registerPacket(ACKPacket.class);
-        registerPacket(NACKPacket.class);
+        registerPacket(AcknowledgedPacketOld.class);
+        registerPacket(NotAcknowledgedPacketOld.class);
 
         registerPacket(PingPacket.class);
         registerPacket(ChatPacket.class);
@@ -50,7 +49,7 @@ public class PacketManager {
             throw new InvalidPacketException("All packets must be annotated with @PacketID.",packet);
         }
         for (int i : id.value()) {
-            System.out.println(i);
+            System.out.println(packet.getName() + " === " + i);
             Preconditions.checkNotNull(packetIds);
             packetIds.put((byte) i,packet);
         }

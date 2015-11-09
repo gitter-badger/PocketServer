@@ -3,6 +3,7 @@ package com.pocketserver.impl.net.packets.login;
 import com.pocketserver.impl.net.InPacket;
 import com.pocketserver.impl.net.PacketID;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
 
@@ -10,17 +11,16 @@ import io.netty.channel.socket.DatagramPacket;
 public class ClientConnectPacket extends InPacket {
 
     long clientId, session;
-    byte unknown;
 
     @Override
     public void decode(DatagramPacket dg, ChannelHandlerContext ctx) {
        // System.out.println("0x09 is a decode packet.");
-        clientId = dg.content().readLong();
-        session = dg.content().readLong();
-        unknown = dg.content().readByte();
+        ByteBuf content = dg.content();
+        System.out.println(content.readableBytes());
+        clientId = content.readLong();
+        session = content.readLong();
 
-        ctx.writeAndFlush(new ServerHandshakePacket(session));
-        System.out.println("And fluuussshiiingggg");
+        new ServerHandshakePacket(session).sentPacket(ctx, dg.sender());
         //.sendGame(0x84, EncapsulationStrategy.COUNT, 0x02F001, 0, ctx, dg.sender());
     }
 

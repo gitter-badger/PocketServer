@@ -8,23 +8,30 @@ import io.netty.channel.socket.DatagramPacket;
 
 @PacketID(0xC0)
 public class ACKPacket extends Packet {
+    private final Packet packet;
+    private final Packet packet2;
     private short unknown;
     private boolean additionalPacket;
     private byte[] packetNumber;
     private byte[] packetNumberTwo;
 
-    public ACKPacket() {}
+    public ACKPacket() {
+        this(null);
+    }
 
     public ACKPacket(Packet packet) {
-
+        this(packet,null);
     }
 
     public ACKPacket(Packet packet,Packet packet2) {
-        
+        this.packet = packet;
+        this.packet2 = packet2;
+        this.additionalPacket = packet2 != null;
     }
 
     @Override
     public void decode(DatagramPacket dg, ChannelHandlerContext ctx) {
+        System.out.println("The client lost the packet.");
         ByteBuf content = dg.content();
         unknown = content.readShort();
         additionalPacket = content.readBoolean();
@@ -43,7 +50,7 @@ public class ACKPacket extends Packet {
 
     @Override
     public DatagramPacket encode(DatagramPacket dg) {
-        System.out.println("The client lost the packet: " + dg.content().readByte());
+
         return dg;
     }
 
