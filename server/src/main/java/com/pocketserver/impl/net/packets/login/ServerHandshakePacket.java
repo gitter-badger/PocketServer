@@ -3,7 +3,7 @@ package com.pocketserver.impl.net.packets.login;
 import com.pocketserver.impl.net.OutPacket;
 import com.pocketserver.impl.net.Packet;
 import com.pocketserver.impl.net.PacketID;
-import com.pocketserver.impl.net.packets.udp.CustomPacket;
+import com.pocketserver.impl.net.util.PacketUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -48,21 +48,22 @@ public class ServerHandshakePacket extends OutPacket {
         }
     }
 
+    @Deprecated
     public void writeTriad(ByteBuf buf,int i) {
-        byte b1 = (byte)((i >> 16) & 0xFF);
-        byte b2 = (byte)((i >> 8) & 0xFF);
-        byte b3 = (byte)(i & 0xFF);
-
-        buf.writeByte(b1);
-        buf.writeByte(b2);
-        buf.writeByte(b3);
+        buf.writeBytes(PacketUtils.getTriad(i));
     }
 
     @Override
-    public Packet sentPacket(ChannelHandlerContext ctx, InetSocketAddress address) {
+    public Packet sendPacket(ChannelHandlerContext ctx, InetSocketAddress address) {
         DatagramPacket encode = encode(new DatagramPacket(Unpooled.buffer(), address));
+        ByteBuf encodedBuf = encode.content();
 
-        CustomPacket.EncapsulationStrategy.BARE.decode(ctx,encode,94);
+        DatagramPacket encapsulated = new DatagramPacket(Unpooled.buffer(),address);
+        ByteBuf content = encapsulated.content();
+        content.writeByte(0x00);
+        content.writeShort(encodedBuf.readableBytes()-1);
+        content.writeBytes(encodedBuf);
+        ctx.writeAndFlush(encapsulated);
         return this;
     }
 }

@@ -4,6 +4,7 @@ import com.pocketserver.impl.net.Packet;
 import com.pocketserver.impl.net.PacketID;
 import com.pocketserver.impl.net.PacketManager;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
 
@@ -17,14 +18,15 @@ public class CustomPacket extends Packet {
         ByteBuf content = dg.content();
         counter = content.readMedium();
         byte encapsulation = content.readByte();
-        short packet_bits = content.readShort();
-        short packet_bytes = (short) (packet_bits / 8);
+        short packetBits = content.readShort();
+        short packetBytes = (short) (packetBits / 8);
 
         EncapsulationStrategy strategy = EncapsulationStrategy.getById(encapsulation);
         DatagramPacket packet = new DatagramPacket(content,dg.recipient(),dg.sender());
         if (strategy != null) {
-            strategy.decode(ctx, packet,packet_bytes);
+            strategy.decode(ctx, packet,packetBytes);
         }
+        new DatagramPacket(Unpooled.buffer(),dg.sender());
     }
 
     @Override
@@ -40,7 +42,6 @@ public class CustomPacket extends Packet {
                 byte id = content.readByte();
 
                 Packet initialized = PacketManager.getInstance().initializePacketById(id);
-
                 DatagramPacket send = new DatagramPacket(content.readBytes(bytes+1), packet.recipient(), packet.sender());
                 initialized.decode(send,ctx);
             }

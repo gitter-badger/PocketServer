@@ -27,7 +27,7 @@ public class PocketPlayer extends PocketLivingEntity implements Player {
 
     @Override
     public void sendMessage(String message) {
-        new MessagePacket(message).sentPacket(ctx, address);
+        new MessagePacket(message).sendPacket(ctx, address);
     }
 
     @Override

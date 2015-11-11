@@ -51,8 +51,8 @@ public class AcknowledgedPacketOld extends Packet {
     }
 
     @Override
-    public Packet sentPacket(ChannelHandlerContext ctx, InetSocketAddress addr) {
-        super.sentPacket(ctx, addr);
+    public Packet sendPacket(ChannelHandlerContext ctx, InetSocketAddress addr) {
+        super.sendPacket(ctx, addr);
         System.out.format("ACK send: unknown = %d, pkt_id1 = %d, pkt_id2 = %d\n", unknown, pkt_id1, pkt_id2);
         return this;
     }

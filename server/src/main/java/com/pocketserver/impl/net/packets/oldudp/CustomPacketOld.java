@@ -3,7 +3,6 @@ package com.pocketserver.impl.net.packets.oldudp;
 import com.google.common.base.Preconditions;
 import com.pocketserver.impl.net.Packet;
 import com.pocketserver.impl.net.PacketID;
-import com.pocketserver.impl.net.PacketManager;
 
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -92,7 +91,7 @@ public class CustomPacketOld extends Packet {
             } else {
                 System.out.println();
             }
-            AcknowledgedPacketOld.one(1, num).sentPacket(ctx, dg.sender());
+            AcknowledgedPacketOld.one(1, num).sendPacket(ctx, dg.sender());
         }
     }
 

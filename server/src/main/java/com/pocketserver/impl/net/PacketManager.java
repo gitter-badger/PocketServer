@@ -16,6 +16,7 @@ import com.pocketserver.impl.net.packets.ping.PingPacket;
 import com.pocketserver.impl.net.packets.udp.ACKPacket;
 import com.pocketserver.impl.net.packets.udp.CustomPacket;
 import com.pocketserver.impl.net.packets.udp.NACKPacket;
+import io.github.jython234.jraklibplus.protocol.raknet.AcknowledgePacket;
 
 public class PacketManager {
 
@@ -31,8 +32,8 @@ public class PacketManager {
         registerPacket(OpenConnectionRequestAPacket.class);
         registerPacket(OpenConnectionRequestBPacket.class);
         registerPacket(CustomPacket.class);
-        registerPacket(AcknowledgedPacketOld.class);
-        registerPacket(NotAcknowledgedPacketOld.class);
+        registerPacket(ACKPacket.class);
+        registerPacket(NACKPacket.class);
 
         registerPacket(PingPacket.class);
         registerPacket(ChatPacket.class);

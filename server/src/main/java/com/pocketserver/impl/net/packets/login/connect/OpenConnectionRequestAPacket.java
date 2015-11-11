@@ -25,9 +25,9 @@ public class OpenConnectionRequestAPacket extends InPacket {
             System.out.println("Proto = " + proto + ", MTU = " + mtu);
             if (proto == Protocol.RAKNET_VERSION) {
                 System.out.println("Sent?");
-                new OpenConnectionReplyAPacket(mtu).sentPacket(ctx, dg.sender());
+                new OpenConnectionReplyAPacket(mtu).sendPacket(ctx, dg.sender());
             } else {
-                new IncompatibleProtocolPacket().sentPacket(ctx, dg.sender());
+                new IncompatibleProtocolPacket().sendPacket(ctx, dg.sender());
             }
         }
     }

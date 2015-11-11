@@ -20,7 +20,7 @@ public class ClientConnectPacket extends InPacket {
         clientId = content.readLong();
         session = content.readLong();
 
-        new ServerHandshakePacket(session).sentPacket(ctx, dg.sender());
+        new ServerHandshakePacket(session).sendPacket(ctx, dg.sender());
         //.sendGame(0x84, EncapsulationStrategy.COUNT, 0x02F001, 0, ctx, dg.sender());
     }
 
