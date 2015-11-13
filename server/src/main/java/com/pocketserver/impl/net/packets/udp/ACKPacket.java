@@ -7,54 +7,31 @@ import com.pocketserver.impl.net.util.PacketUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
-import org.apache.commons.lang3.ArrayUtils;
 
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @PacketID(0xC0)
 public class ACKPacket extends Packet {
-    private static int ctr = 0;
-    private int[] packets;
+    private final int[] packets;
 
     public ACKPacket(int[] packets) {
         this.packets = packets;
     }
 
-    @SuppressWarnings("unused") //This will be used through reflection.
+    @Deprecated //You shouldn't be initializing it like this.
+    @SuppressWarnings("unused") //This will be used through reflection for receiving.
     public ACKPacket() {
         this(null);
     }
 
     @Override
     public void decode(DatagramPacket dg, ChannelHandlerContext ctx) {
-        ByteBuf content = dg.content();
-        ctr++;
-        int count = content.readShort();
-        List<Integer> packets = new ArrayList<>();
-        int cnt = 0;
-        for (int i = 0; i < count && !content.isReadable() && cnt < 4096; i++) {
-            if (content.readByte() == 0) {
-                int start = PacketUtils.readTriad(content.readBytes(new byte[3]));
-                int end = PacketUtils.readTriad(content.readBytes(new byte[3]));
-                if ((end - start) > 512) {
-                    end = start + 512;
-                }
-                for (int c = start; c <= end; c++) {
-                    cnt = cnt + 1;
-                    packets.add(c);
-                }
-            } else {
-                packets.add(PacketUtils.readTriad(content.readBytes(new byte[3])));
-            }
-        }
-        this.packets = ArrayUtils.toPrimitive(packets.stream().toArray(Integer[]::new));
+        System.out.println("Thx mr skeletal");
     }
 
-    @Override
+    @Override //Credit to jRakNet or whatever it's called. Very helpful. //TODO: Fix this up.
     public DatagramPacket encode(DatagramPacket dg) {
         Preconditions.checkNotNull(packets);
 
@@ -73,7 +50,7 @@ public class ACKPacket extends Packet {
                 int diff = current - last;
                 if (diff == 1) {
                     last = current;
-                } else if (diff > 1) { //Forget about duplicated packets (bad queues?)
+                } else if (diff > 1) {
                     if (start == last) {
                         payload.put((byte) 0x01);
                         payload.put(PacketUtils.getTriad(start));
@@ -98,14 +75,14 @@ public class ACKPacket extends Packet {
             }
             records = records + 1;
         }
+        content.writeByte(getPacketID());
         content.writeShort((short) records);
-        content.writeBytes(Arrays.copyOf(payload.array(), payload.position()));
+        content.writeBytes(payload.array());
         return dg;
     }
 
     @Override
     public Packet sendPacket(ChannelHandlerContext ctx, InetSocketAddress address) {
-        System.out.println("This SHOULD be sending.");
         return super.sendPacket(ctx, address);
     }
 }

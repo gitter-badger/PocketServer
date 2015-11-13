@@ -2,6 +2,10 @@ package com.pocketserver.impl.net.util;
 
 import io.netty.buffer.ByteBuf;
 
+import java.net.InetAddress;
+import java.net.SocketAddress;
+import java.nio.ByteBuffer;
+
 public final class PacketUtils {
     private PacketUtils() {}
 

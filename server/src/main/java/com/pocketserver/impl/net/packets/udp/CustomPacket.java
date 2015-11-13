@@ -4,29 +4,26 @@ import com.pocketserver.impl.net.Packet;
 import com.pocketserver.impl.net.PacketID;
 import com.pocketserver.impl.net.PacketManager;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
 
 @PacketID({ 0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E, 0x8F })
 public class CustomPacket extends Packet {
-    @SuppressWarnings("all")
-    private static int counter = 0;
 
     @Override
     public void decode(DatagramPacket dg, ChannelHandlerContext ctx) {
         ByteBuf content = dg.content();
-        counter = content.readMedium();
+        int counter = content.readMedium();
         byte encapsulation = content.readByte();
         short packetBits = content.readShort();
         short packetBytes = (short) (packetBits / 8);
+        new ACKPacket(new int[]{counter}).sendPacket(ctx,dg.sender());
 
         EncapsulationStrategy strategy = EncapsulationStrategy.getById(encapsulation);
         DatagramPacket packet = new DatagramPacket(content,dg.recipient(),dg.sender());
         if (strategy != null) {
             strategy.decode(ctx, packet,packetBytes);
         }
-        new DatagramPacket(Unpooled.buffer(),dg.sender());
     }
 
     @Override
